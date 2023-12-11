@@ -6,7 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'php --version'
+                    bat 'php --version'
                 }
             }
         }
