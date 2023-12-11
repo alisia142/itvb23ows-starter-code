@@ -2,54 +2,12 @@ Jenkinsfile (Declarative Pipeline)
 
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent { docker { image 'php:8.3.0-alpine3.18' } }
+    agent { docker { image 'itvb23ows-starter-code-web' } }
     stages {
         stage('build') {
             steps {
                 sh 'php --version'
-                bat 'set'
             }
-        }
-        stage('Deploy') {
-            steps {
-                retry(3) {
-                    sh './flakey-deploy.sh'
-                }
-
-                timeout(time: 3, unit: 'MINUTES') {
-                    sh './health-check.sh'
-                }
-            }
-            steps {
-                timeout(time: 3, unit: 'MINUTES') {
-                    retry(5) {
-                        sh './flakey-deploy.sh'
-                    }
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'echo "Fail!"; exit 1'
-            }
-        }
-    }
-    post {
-        always {
-            echo 'This will always run'
-        }
-        success {
-            echo 'This will run only if successful'
-        }
-        failure {
-            echo 'This will run only if failed'
-        }
-        unstable {
-            echo 'This will run only if the run was marked as unstable'
-        }
-        changed {
-            echo 'This will run only if the state of the Pipeline has changed'
-            echo 'For example, if the Pipeline was previously failing but is now successful'
         }
     }
 }
