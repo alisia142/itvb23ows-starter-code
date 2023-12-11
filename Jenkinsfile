@@ -1,7 +1,7 @@
 
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent { docker { image 'jenkins-docker' } }
+    agent { docker { image 'myjenkins-blueocean:2.426.1-1' } }
     stages {
         stage('build') {
             steps {
