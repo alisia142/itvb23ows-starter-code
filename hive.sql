@@ -18,6 +18,8 @@
 --
 -- Table structure for table `games`
 --
+CREATE DATABASE hive; 
+use hive;
 
 DROP TABLE IF EXISTS `games`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
