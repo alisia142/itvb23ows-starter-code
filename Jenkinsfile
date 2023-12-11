@@ -1,13 +1,11 @@
 
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent { docker { image 'myjenkins-blueocean:2.426.1-1' } }
+    agent any
     stages {
-        stage('Build') {
+        stage('Example') {
             steps {
-                script {
-                    bat 'php --version'
-                }
+                echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
         }
     }
