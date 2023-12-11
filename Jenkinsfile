@@ -1,11 +1,11 @@
 
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent { docker { image 'myjenkins-blueocean:2.426-1-1' } }
+    agent { docker { image 'node:20.10.0-alpine3.18' } }
     stages {
-        stage('build') {
+        stage('Test') {
             steps {
-                sh 'docker --version'
+                sh 'node --version'
             }
         }
     }
