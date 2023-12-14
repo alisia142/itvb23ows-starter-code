@@ -1,15 +1,9 @@
 pipeline {
-    agent {
-        docker {
-            image 'myjenkins-blueocean:2.426.1-1'
-        }
-    }
+    agent { docker { image 'php:8.3.0-alpine3.19' } }
     stages {
-        stage('Build') {
+        stage('build') {
             steps {
-                script {
-                    sh 'php --version'
-                }
+                sh 'php --version'
             }
         }
     }
