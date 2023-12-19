@@ -1,13 +1,14 @@
 pipeline {
-    agent { docker { image 'php:8.3.0-alpine3.19' } }
+    agent any
     stages {
-        stage('build') {
+        stage('Deploy') {
             steps {
-                sh 'php --version'
-                sh '''
-                    echo "Multiline shell steps work too"
-                    ls -lah
-                '''
+                retry(3) {
+                    sh './flakey-deploy.sh'
+                }
+                timeout(time: 3, unit: 'MINUTES') {
+                    sh './health-check.sh'
+                }
             }
         }
     }
