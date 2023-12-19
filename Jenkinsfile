@@ -1,24 +1,40 @@
 pipeline {
     agent any
+
     stages {
-        /* "Build" and "Test" stages omitted */
-
-        stage('Deploy - Staging') {
+        stage('Checkout') {
             steps {
-                sh './deploy staging'
-                sh './run-smoke-tests'
+                script {
+                    // Git-checkout
+                    checkout scm
+                }
             }
         }
 
-        stage('Sanity check') {
+        stage('Build') {
             steps {
-                input "Does the staging environment look ok?"
+                script {
+                    // Voer bouwstappen uit
+                    sh 'mvn clean install'
+                }
             }
         }
 
-        stage('Deploy - Production') {
+        stage('Test') {
             steps {
-                sh './deploy production'
+                script {
+                    // Voer tests uit
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Implementeer de applicatie
+                    sh 'mvn deploy'
+                }
             }
         }
     }
