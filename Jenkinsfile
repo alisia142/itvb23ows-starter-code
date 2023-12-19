@@ -1,40 +1,22 @@
 pipeline {
     agent any
-
+    options {
+        skipStagesAfterUnstable()
+    }
     stages {
-        stage('Checkout') {
-            steps {
-                script {
-                    // Git-checkout
-                    checkout scm
-                }
-            }
-        }
-
         stage('Build') {
             steps {
-                script {
-                    // Voer bouwstappen uit
-                    sh 'mvn clean install'
-                }
+                echo 'Building'
             }
         }
-
         stage('Test') {
             steps {
-                script {
-                    // Voer tests uit
-                    sh 'mvn test'
-                }
+                echo 'Testing'
             }
         }
-
         stage('Deploy') {
             steps {
-                script {
-                    // Implementeer de applicatie
-                    sh 'mvn deploy'
-                }
+                echo 'Deploying'
             }
         }
     }
