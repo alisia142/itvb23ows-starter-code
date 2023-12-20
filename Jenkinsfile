@@ -1,7 +1,7 @@
 pipeline {
     agent { label '!windows' }
     stages (
-        stage('build & SonarQube') {
+        stage('SonarQube') {
             steps {
                 script { 
                     scannerHome = tool 'SonarQube Scanner' 
