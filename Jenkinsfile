@@ -1,22 +1,11 @@
 pipeline {
-    agent any
-    options {
-        skipStagesAfterUnstable()
-    }
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying'
+    agent { label '!windows' }
+    stage('SonarQube') {
+        steps {
+        script { scannerHome = tool 'SonarQube Scanner' }
+        withSonarQubeEnv('SonarQube') {
+            sh "${scannerHome}/bin/sonar-scanner
+            -Dsonar.projectKey=SonarQube"
             }
         }
     }
