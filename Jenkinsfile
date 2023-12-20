@@ -1,6 +1,6 @@
 pipeline {
     agent { label '!windows' }
-    stages (
+    stages {
         stage('SonarQube') {
             steps {
                 script { 
@@ -11,5 +11,5 @@ pipeline {
                 }
             }
         }
-    )
+    }
 }
