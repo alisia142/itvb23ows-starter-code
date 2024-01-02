@@ -13,3 +13,6 @@ pipeline {
         }
     }
 }
+
+// https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose
+// https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/install-the-server/installing-sonarqube-from-docker/

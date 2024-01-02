@@ -76,6 +76,8 @@
     <body>
         <div class="board">
             <?php
+                echo "hello";
+                echo $hand;
                 $min_p = 1000;
                 $min_q = 1000;
                 foreach ($board as $pos => $tile) {
