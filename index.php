@@ -22,7 +22,7 @@
     if (!count($to)) $to[] = '0,0';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Hive</title>
         <style>
@@ -76,8 +76,6 @@
     <body>
         <div class="board">
             <?php
-                echo "hello";
-                echo $hand;
                 $min_p = 1000;
                 $min_q = 1000;
                 foreach ($board as $pos => $tile) {
@@ -169,7 +167,7 @@
         <strong><?php if (isset($_SESSION['error'])) echo($_SESSION['error']); unset($_SESSION['error']); ?></strong>
         <ol>
             <?php
-                $db = include 'database.php';
+                $db = include_once 'database.php';
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
                 $result = $stmt->get_result();
