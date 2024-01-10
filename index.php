@@ -144,8 +144,14 @@
             </select>
             <select name="to">
                 <?php
+                    $availablePositions = [];
+                    foreach(array_keys($board) as $availableTile) {
+                        array_push($availablePositions, $availableTile);
+                    }
                     foreach ($to as $pos) {
-                        echo "<option value=\"$pos\">$pos</option>";
+                        if (!in_array($pos, $availablePositions)) {
+                            echo "<option value=\"$pos\">$pos</option>";
+                        }   
                     }
                 ?>
             </select>
