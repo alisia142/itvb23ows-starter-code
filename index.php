@@ -24,6 +24,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        this is a test
         <title>Hive</title>
         <style>
             div.board {
@@ -127,7 +128,16 @@
         <form method="post" action="play.php">
             <select name="piece">
                 <?php
+                $tiles = ["Q","B","S","A","G"];
+                $availableTiles = [];
                     foreach ($hand[$player] as $tile => $ct) {
+                        if (in_array($tile, $tiles)) {
+                            for ($i = 0; $i < $ct; $i++) {
+                                $availableTiles = array_merge($availableTiles, array_fill(0, $ct, $tile));
+                            }
+                        }
+                    }
+                    foreach ($availableTiles as $tile) {
                         echo "<option value=\"$tile\">$tile</option>";
                     }
                 ?>
