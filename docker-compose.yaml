@@ -3,6 +3,8 @@ services:
     build: .
     ports:
       - "3000:3000"
+    volumes:
+      - ./itvb23ows-starter-code:/itvb23ows-starter-code/web-1/src
   db:
     image: mysql:8.0
     ports:
