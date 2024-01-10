@@ -21,6 +21,7 @@ elseif (array_sum($hand) < 11 && !neighboursAreSameColor($player, $to, $board))
     $_SESSION['error'] = "Board position has opposing neighbour";
 elseif (array_sum($hand) <= 8 && $hand['Q']) {
     $_SESSION['error'] = 'Must play queen bee';
+    exit(0);
 } else {
     $_SESSION['board'][$to] = [[$_SESSION['player'], $piece]];
     $_SESSION['hand'][$player][$piece]--;
