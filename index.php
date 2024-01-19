@@ -19,12 +19,16 @@
         }
     }
     $to = array_unique($to);
-    if (!count($to)) $to[] = '0,0';
+    if (!count($to)) {
+        $to[] = '0,0';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        this is a test
+        <?php
+            echo date("d.m.y");
+        ?>
         <title>Hive</title>
         <style>
             div.board {
@@ -81,8 +85,12 @@
                 $min_q = 1000;
                 foreach ($board as $pos => $tile) {
                     $pq = explode(',', $pos);
-                    if ($pq[0] < $min_p) $min_p = $pq[0];
-                    if ($pq[1] < $min_q) $min_q = $pq[1];
+                    if ($pq[0] < $min_p) {
+                        $min_p = $pq[0];
+                    }
+                    if ($pq[1] < $min_q) {
+                        $min_q = $pq[1];
+                    }
                 }
                 foreach (array_filter($board) as $pos => $tile) {
                     $pq = explode(',', $pos);
@@ -91,7 +99,9 @@
                     $h = count($tile);
                     echo '<div class="tile player';
                     echo $tile[$h-1][0];
-                    if ($h > 1) echo ' stacked';
+                    if ($h > 1) {
+                        echo ' stacked';
+                    };
                     echo '" style="left: ';
                     echo ($pq[0] - $min_p) * 4 + ($pq[1] - $min_q) * 2;
                     echo 'em; top: ';
@@ -123,7 +133,13 @@
             ?>
         </div>
         <div class="turn">
-            Turn: <?php if ($player == 0) echo "White"; else echo "Black"; ?>
+            Turn: 
+            <?php if ($player == 0) {
+                echo "White";
+            } else {
+                echo "Black";
+            }
+            ?>
         </div>
         <form method="post" action="play.php">
             <select name="piece">
@@ -178,7 +194,14 @@
         <form method="post" action="restart.php">
             <input type="submit" value="Restart">
         </form>
-        <strong><?php if (isset($_SESSION['error'])) echo($_SESSION['error']); unset($_SESSION['error']); ?></strong>
+        <strong>
+            <?php 
+                if (isset($_SESSION['error'])) {
+                    echo($_SESSION['error']); 
+                    unset($_SESSION['error']);
+                }
+            ?>
+        </strong>
         <ol>
             <?php
                 $db = include_once 'database.php';
