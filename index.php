@@ -149,7 +149,7 @@
                     foreach ($to as $pos) {
                         if (!in_array($pos, $availablePositions)) {
                             echo "<option value=\"$pos\">$pos</option>";
-                        }   
+                        }
                     }
                 ?>
             </select>
