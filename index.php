@@ -101,7 +101,7 @@
                     echo $tile[$h-1][0];
                     if ($h > 1) {
                         echo ' stacked';
-                    };
+                    }
                     echo '" style="left: ';
                     echo ($pq[0] - $min_p) * 4 + ($pq[1] - $min_q) * 2;
                     echo 'em; top: ';
@@ -133,7 +133,7 @@
             ?>
         </div>
         <div class="turn">
-            Turn: 
+            Turn:
             <?php if ($player == 0) {
                 echo "White";
             } else {
@@ -195,9 +195,9 @@
             <input type="submit" value="Restart">
         </form>
         <strong>
-            <?php 
+            <?php
                 if (isset($_SESSION['error'])) {
-                    echo($_SESSION['error']); 
+                    echo($_SESSION['error']);
                     unset($_SESSION['error']);
                 }
             ?>
