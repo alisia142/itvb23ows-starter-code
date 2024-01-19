@@ -12,5 +12,3 @@ function set_state($state) {
 }
 
 return new mysqli('db', 'root', '', 'hive');
-
-?>
