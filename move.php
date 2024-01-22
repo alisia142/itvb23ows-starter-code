@@ -41,12 +41,16 @@ if (!isset($board[$from])) {
             $_SESSION['error'] = "Move would split hive";
         } else {
             if ($from == $to) {
-                $_SESSION['error'] = 'Tile must move';
+                $_SESSION['error'] = "Tile must move";
             } elseif (isset($board[$to]) && $tile[1] != "B") {
-                $_SESSION['error'] = 'Tile not empty';
+                $_SESSION['error'] = "Tile not empty";
             } elseif ($tile[1] == "Q" || $tile[1] == "B") {
                 if (!slide($board, $from, $to)) {
-                    $_SESSION['error'] = 'Tile must slide';
+                    $_SESSION['error'] = "Tile must slide";
+                }
+            } elseif ($tile[1] == "G") {
+                if (!validGrasshopper($board, $from, $to)) {
+                    $_SESSION['error'] = "Not a valid grasshopper move";
                 }
             }
         }
