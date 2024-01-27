@@ -3,6 +3,7 @@
 session_start();
 
 include_once 'util.php';
+include_once 'database.php';
 
 $from = $_POST['from'];
 $to = $_POST['to'];
@@ -11,6 +12,9 @@ $player = $_SESSION['player'];
 $board = $_SESSION['board'];
 $hand = $_SESSION['hand'][$player];
 unset($_SESSION['error']);
+
+$gameState = new Game($hand, $board, $player);
+$database = new Database();
 
 if (!isset($board[$from])) {
     $_SESSION['error'] = 'Board position is empty';
@@ -52,6 +56,10 @@ if (!isset($board[$from])) {
                 if (!validGrasshopper($board, $from, $to)) {
                     $_SESSION['error'] = "Not a valid grasshopper move";
                 }
+            } elseif ($tile[1] == "A") {
+                if (!validAnt($board, $from, $to)) {
+                    $_SESSION['error'] = "Not a valid ant move";
+                }
             }
         }
     }
@@ -68,12 +76,12 @@ if (!isset($board[$from])) {
             $board[$to] = [$tile];
         }
         $_SESSION['player'] = 1 - $_SESSION['player'];
-        $db = include_once 'database.php';
+        $db = $database->getDatabase();
         $stmt = $db->prepare(
             'insert into moves (game_id, type, move_from, move_to, previous_id, state) 
             values (?, "move", ?, ?, ?, ?)'
         );
-        $stmt->bind_param('issis', $_SESSION['game_id'], $from, $to, $_SESSION['last_move'], get_state());
+        $stmt->bind_param('issis', $_SESSION['game_id'], $from, $to, $_SESSION['last_move'], $gameState->getState());
         $stmt->execute();
         $_SESSION['last_move'] = $db->insert_id;
         unset($board[$from]);

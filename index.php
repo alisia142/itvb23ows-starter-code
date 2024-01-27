@@ -2,6 +2,8 @@
     session_start();
 
     include_once 'util.php';
+    include_once 'database.php';
+
 
     if (!isset($_SESSION['board'])) {
         header('Location: restart.php');
@@ -10,6 +12,9 @@
     $board = $_SESSION['board'];
     $player = $_SESSION['player'];
     $hand = $_SESSION['hand'];
+
+    $gameState = new Game($hand, $board, $player);
+    $database = new Database();
 
     $to = [];
     foreach ($GLOBALS['OFFSETS'] as $pq) {
@@ -26,9 +31,6 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <?php
-            echo date("d.m.y");
-        ?>
         <title>Hive</title>
         <style>
             div.board {
@@ -204,7 +206,7 @@
         </strong>
         <ol>
             <?php
-                $db = include_once 'database.php';
+                $db = $database->getDatabase();
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -219,3 +221,4 @@
     </body>
 </html>
 
+docker build . -t itvb23ows-starter-code-web
