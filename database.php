@@ -34,6 +34,18 @@ class Game {
         $this->board = $board;
         $this->player = $player;
     }
+
+    public function getHand() {
+        return $this->hand;
+    }
+
+    public function getBoard() {
+        return $this->board;
+    }
+
+    public function getPlayer() {
+        return $this->player;
+    }
 }
 
 class Database {

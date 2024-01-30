@@ -119,3 +119,11 @@ function validGrasshopper($board, $from, $to) {
     }
     return false;
 }
+
+function validAnt($board, $from, $to) {
+    if ($from === $to) {
+        return false;
+    }
+    
+    return false;
+}
