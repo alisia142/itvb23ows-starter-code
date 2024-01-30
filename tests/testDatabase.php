@@ -4,22 +4,28 @@ use PHPUnit\Framework\TestCase;
 final class DBTest extends TestCase {
     public function testCreatedDatabase(): void
     {
-        $connection = new mysqli('db', 'root', '', 'hive');
-        if ($connection->connect_error) {
-            die("Connection Failed: " . $connection->connect_error);
-        } 
-        echo "Connected Successfully";
-    }
+        $database = new Database();
+        $database->getDatabase();
 
-    public function testAddMove(): void
-    {
-        $connection = new mysqli('db', 'root', '', 'hive');
-        if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
-        }
-        $stmt = $connection->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state) 
-        values (?, "move", ?, ?, ?, ?)');
-        $stmt->bind_param('issis', 1, '0,0', '1,0', 2, 'BBSSAAAGGG');
-        $stmt->execute();
+        $this->assertInstanceOf(mysqli::class, $database);
+        $this->assertFalse($database->connect_error);
+    }
+}
+
+final class GameTest extends TestCase {
+    public function testGameState(): void {
+        $hand = ["Q","B","B","S","S","A","A","A","G","G","G"];
+        $board = [];
+        $player = 0;
+
+        $gameState = new Game($hand, $board, $player);
+        $state = $gameState->getState();
+
+        $newGameState = new Game([], [], 0);
+        $newGameState->setState($state);
+
+        $this->assertFalse($hand, $newGameState->getHand());
+        $this->assertEquals($board, $newGameState->getBoard());
+        $this->assertEquals($player, $newGameState->getPlayer());
     }
 }
