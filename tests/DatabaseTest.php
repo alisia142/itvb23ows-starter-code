@@ -1,14 +1,15 @@
 <?php
 use PHPUnit\Framework\TestCase;
+include_once('database.php');
 
-final class DBTest extends TestCase {
+final class DatabaseTest extends TestCase {
     public function testCreatedDatabase(): void
     {
         $database = new Database();
         $database->getDatabase();
 
         $this->assertInstanceOf(mysqli::class, $database);
-        $this->assertFalse($database->connect_error);
+        $this->assertFalse($database->connect_errno);
     }
 }
 
