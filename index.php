@@ -220,5 +220,3 @@
         </form>
     </body>
 </html>
-
-docker build . -t itvb23ows-starter-code-web
