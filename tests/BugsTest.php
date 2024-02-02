@@ -56,7 +56,25 @@ final class AntTest extends TestCase {
 }
 
 final class SpiderTest extends TestCase {
-    // TODO: Implement test for spider
+    public function testSpiderValid() {
+        $board = [
+            '0,0' => ['W', 'S'],
+            '1,1' => ['B', 'S'],
+        ];
+
+        $valid = validSpider($board, '0,0', '0,1') && validSpider($board, '0,1', '1,1') && validSpider($board, '1,0', '1,1');
+        $this->assertTrue($valid);
+    }
+
+    public function testSpiderInvalid() {
+        $board = [
+            '0,0' => ['W', 'S'],
+            '1,1' => ['B', 'S'],
+        ];
+
+        $valid = validSpider($board, '0,0', '1,1');
+        $this->assertFalse($valid);
+    }
 }
 
 final class QueenTest extends TestCase {
