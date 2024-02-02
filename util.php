@@ -124,6 +124,13 @@ function validAnt($board, $from, $to) {
     if ($from === $to) {
         return false;
     }
+    // Ant kan onbeperkt aantal keer verplaatsen dus haal hem van het bord
+    unset($from);
+
+    // Kijk of de ant hetzelfde mag als de bijenkoningin
+    if (slide($board, $from, $to)) {
+        return true;
+    }
     
     return false;
 }
