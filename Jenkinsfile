@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages {
         stage('build') {
-            agent { docker { image 'php:5.6' } }
+            agent { docker { image 'php:5.6-cli' } }
             steps {
                 sh 'php --version'
             }
