@@ -1,23 +1,23 @@
 services:
   mysql:
-    build:
-      context: .
-      dockerfile: ./docker/mysql/Dockerfile
-    container_name: hive_mysql
+    image: mysql:8.3
+    container_name: db-1
     env_file:
       - .env
     ports:
       - 3306:3306
+    volumes:
+      - ./hive.sql:/docker-entrypoint-initdb.d/hive.sql
     restart: unless-stopped
   php:
     build:
       context: .
       dockerfile: ./docker/php/Dockerfile
-    container_name: hive_php
+    container_name: web-1
     env_file:
       - .env
     ports:
-      - 8000:8000
+      - 3000:3000
     restart: unless-stopped
   ai:
     build: ./ai/
