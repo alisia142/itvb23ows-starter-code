@@ -1,14 +1,16 @@
 <?php
 
-session_start();
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
-include_once 'util.php';
-include_once 'database.php';
+use App\Board;
+
+session_start();
 
 $from = $_POST['from'];
 $to = $_POST['to'];
 
 $player = $_SESSION['player'];
+/** @var Board $board */
 $board = $_SESSION['board'];
 $hand = $_SESSION['hand'][$player];
 unset($_SESSION['error']);
@@ -16,14 +18,14 @@ unset($_SESSION['error']);
 $gameState = new Game($hand, $board, $player);
 $database = new Database();
 
-if (!isset($board[$from])) {
+if ($board->isPositionEmpty($from)) {
     $_SESSION['error'] = 'Board position is empty';
-} elseif ($board[$from][count($board[$from])-1][0] != $player) {
+} elseif ($board->isTileOwnedByPlayer($from, $player)) {
     $_SESSION['error'] = "Tile is not owned by player";
 } elseif ($hand['Q']) {
     $_SESSION['error'] = "Queen bee is not played";
 } else {
-    $tile = array_pop($board[$from]);
+    $tiles = $board->getAllPositions();
     if (!hasNeighBour($to, $board)) {
         $_SESSION['error'] = "Move would split hive";
     } else {
@@ -31,7 +33,7 @@ if (!isset($board[$from])) {
         $queue = [array_shift($all)];
         while ($queue) {
             $next = explode(',', array_shift($queue));
-            foreach ($GLOBALS['OFFSETS'] as $pq) {
+            foreach (Board::OFFSETS as $pq) {
                 list($p, $q) = $pq;
                 $p += $next[0];
                 $q += $next[1];
@@ -46,10 +48,10 @@ if (!isset($board[$from])) {
         } else {
             if ($from == $to) {
                 $_SESSION['error'] = "Tile must move";
-            } elseif (isset($board[$to]) && $tile[1] != "B") {
+            } elseif (!$board->isPositionEmpty($to) && $tile[1] != "B") {
                 $_SESSION['error'] = "Tile not empty";
             } elseif ($tile[1] == "Q" || $tile[1] == "B") {
-                if (!slide($board, $from, $to)) {
+                if (!$board->slide($from, $to)) {
                     $_SESSION['error'] = "Tile must slide";
                 }
             } elseif ($tile[1] == "G") {
@@ -64,24 +66,16 @@ if (!isset($board[$from])) {
         }
     }
     if (isset($_SESSION['error'])) {
-        if (isset($board[$from])) {
-            array_push($board[$from], $tile);
-        } else {
-            $board[$from] = [$tile];
-        }
+        $board->pushTile($from, $tile);
     } else {
-        if (isset($board[$to])) {
-            array_push($board[$to], $tile);
-        } else {
-            $board[$to] = [$tile];
-        }
+        $board->pushTile($to, $tile);
         $_SESSION['player'] = 1 - $_SESSION['player'];
         $db = $database->getDatabase();
         $stmt = $db->prepare(
             'insert into moves (game_id, type, move_from, move_to, previous_id, state)
             values (?, "move", ?, ?, ?, ?)'
         );
-        $stmt->bind_param('issis', $_SESSION['game_id'], $from, $to, $_SESSION['last_move'], $gameState->getState());
+        $stmt->bind_param('issis', $_SESSION['game_id'], $from, $to, $_SESSION['last_move'], getState());
         $stmt->execute();
         $_SESSION['last_move'] = $db->insert_id;
         unset($board[$from]);

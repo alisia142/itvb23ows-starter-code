@@ -1,48 +1,21 @@
 <?php
 
-class Game {
-    private $hand;
-    private $board;
-    private $player;
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
-    public function __construct($hand, $board, $player) {
-        $this->hand = $hand;
-        $this->board = $board;
-        $this->player = $player;
-    }
+use App\Board;
 
-    public function getState() {
-        return serialize([$this->hand, $this->board, $this->player]);
-    }
-
-    public function setState($state) {
-        list($hand, $board, $player) = unserialize($state);
-        $this->hand = $hand;
-        $this->board = $board;
-        $this->player = $player;
-    }
-
-    public function getHand() {
-        return $this->hand;
-    }
-
-    public function getBoard() {
-        return $this->board;
-    }
-
-    public function getPlayer() {
-        return $this->player;
-    }
+function getState() {
+    $board = $_SESSION['board'];
+    return serialize([$_SESSION['hand'], $board->getTiles(), $_SESSION['player']]);
 }
 
-class Database {
-    private $db;
-    
-    public function __construct() {
-        $this->db = new mysqli($_ENV['PHP_MYSQL_HOSTNAME'], 'root', $_ENV['MYSQL_ROOT_PASSWORD'], 'hive');
-    }
-
-    public function getDatabase() {
-        return $this->db;
-    }
+function setState($state) {
+    list($a, $b, $c) = unserialize($state);
+    $_SESSION['hand'] = $a;
+    $_SESSION['board'] = new Board($b);
+    $_SESSION['player'] = $c;
 }
+
+return new mysqli($_ENV['PHP_MYSQL_HOSTNAME'], 'root', $_ENV['MYSQL_ROOT_PASSWORD'], $_ENV['MYSQL_DATABASE']);
+
+?>

@@ -1,16 +1,17 @@
 <?php
 
+require_once dirname(__DIR__).'/vendor/autoload.php';
+
+use App\Board;
+
 session_start();
 
-include_once 'database.php';
-
-$database = new Database();
 $player = $_SESSION['player'];
+/** @var Board $board */
 $board = $_SESSION['board'];
 $hand = $_SESSION['hand'][$player];
-$gameState = new Game($hand, $board, $player);
 
-$db = $database->getDatabase();
+$db = include_once 'database.php';
 $stmt = $db->prepare('SELECT * FROM moves WHERE id = '.$_SESSION['last_move']);
 $stmt->execute();
 $result = $stmt->get_result()->fetch_array();

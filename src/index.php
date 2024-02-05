@@ -1,24 +1,23 @@
 <?php
+    require_once dirname(__DIR__).'/vendor/autoload.php';
+
+    use App\Board;
+
     session_start();
-
-    include_once 'util.php';
-    include_once 'database.php';
-
 
     if (!isset($_SESSION['board'])) {
         header('Location: restart.php');
         exit(0);
     }
+
+    /** @var Board $board */
     $board = $_SESSION['board'];
     $player = $_SESSION['player'];
     $hand = $_SESSION['hand'];
 
-    $gameState = new Game($hand, $board, $player);
-    $database = new Database();
-
     $to = [];
-    foreach ($GLOBALS['OFFSETS'] as $pq) {
-        foreach (array_keys($board) as $pos) {
+    foreach (Board::OFFSETS as $pq) {
+        foreach ($board->getAllPositions() as $pos) {
             $pq2 = explode(',', $pos);
             $to[] = ($pq[0] + $pq2[0]).','.($pq[1] + $pq2[1]);
         }
@@ -85,7 +84,7 @@
             <?php
                 $min_p = 1000;
                 $min_q = 1000;
-                foreach ($board as $pos => $tile) {
+                foreach ($board->getTiles() as $pos => $tile) {
                     $pq = explode(',', $pos);
                     if ($pq[0] < $min_p) {
                         $min_p = $pq[0];
@@ -94,7 +93,7 @@
                         $min_q = $pq[1];
                     }
                 }
-                foreach (array_filter($board) as $pos => $tile) {
+                foreach (array_filter($board->getTiles()) as $pos => $tile) {
                     $pq = explode(',', $pos);
                     $pq[0];
                     $pq[1];
@@ -176,7 +175,7 @@
         <form method="post" action="move.php">
             <select name="from">
                 <?php
-                    foreach (array_keys($board) as $pos) {
+                    foreach (array_keys($board->getTiles()) as $pos) {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
