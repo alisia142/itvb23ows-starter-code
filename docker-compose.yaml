@@ -5,6 +5,8 @@ services:
       - "3000:3000"
     volumes:
       - ./itvb23ows-starter-code:/itvb23ows-starter-code/web-1/src
+    depends_on:
+      - mysql
   db:
     image: mysql:8.0
     ports:
