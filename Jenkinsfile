@@ -1,10 +1,16 @@
 pipeline {
-    agent { docker { image 'php:5.6-cli-alphine' } }
-    tools {
-        jdk 'openjdk-11'
-    }
+    agent any
     stages {
+        stage('build') {
+            agent { docker { image 'php:5.6-cli' } }
+            steps {
+                sh 'php --version'
+            }
+        }
         stage('SonarQube') {
+            tools {
+                jdk 'openjdk-21'
+            }
             steps {
                 script { 
                     scannerHome = tool 'SonarQube Scanner'
