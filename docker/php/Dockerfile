@@ -1,11 +1,11 @@
 FROM php:8.3
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 EXPOSE 8000
 
 RUN docker-php-ext-install mysqli
 
-COPY ./src /src
+WORKDIR /app
+COPY . /app
 
-WORKDIR /src
-
-CMD [ "php", "-S", "0.0.0.0:8000"]
+CMD [ "php", "-S", "0.0.0.0:8000", "-t", "public"]
