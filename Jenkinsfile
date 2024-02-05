@@ -9,7 +9,7 @@ pipeline {
         }
         stage('SonarQube') {
             tools {
-                jdk 'openjdk-21'
+                jdk 'openjdk-17'
             }
             steps {
                 script { 
