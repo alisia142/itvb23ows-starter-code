@@ -1,5 +1,5 @@
 pipeline {
-    agent { label '!windows' }
+    agent { docker { image 'php:5.6-cli-alphine' } }
     stages {
         stage('SonarQube') {
             steps {
