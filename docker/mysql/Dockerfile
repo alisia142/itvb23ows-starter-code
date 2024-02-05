@@ -1,4 +1,4 @@
-from mysql:8.0
+from mysql:8.3
 
 COPY ./hive.sql /hive/sql
 
