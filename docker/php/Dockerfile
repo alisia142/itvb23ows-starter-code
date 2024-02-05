@@ -1,4 +1,4 @@
-from php:5.6
+from php:8.3
 
 EXPOSE 8000
 
