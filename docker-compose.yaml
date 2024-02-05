@@ -1,24 +1,22 @@
 services:
-  mysql:
-    image: mysql:8.3
-    container_name: db-1
-    env_file:
-      - .env
+  web:
+    build: .
     ports:
-      - 3306:3306
+      - "3000:3000"
     volumes:
-      - ./hive.sql:/docker-entrypoint-initdb.d/hive.sql
-    restart: unless-stopped
-  php:
-    build:
-      context: .
-      dockerfile: ./docker/php/Dockerfile
-    container_name: web-1
-    env_file:
-      - .env
+      - ./itvb23ows-starter-code:/itvb23ows-starter-code/web-1/src
+  db:
+    image: mysql:8.0
     ports:
-      - 3000:3000
-    restart: unless-stopped
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: hive
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ROOT_USER: root
+    volumes:
+      - ./hive.sql:/hive.sql
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--default-authentication-plugin=mysql_native_password', '--init-file=/hive.sql']
   ai:
     build: ./ai/
     command: flask --app app run --debug
