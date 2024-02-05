@@ -39,7 +39,7 @@ class Database {
     private $db;
     
     public function __construct() {
-        $this->db = new mysqli('db', 'root', '', 'hive');
+        $this->db = new mysqli($_ENV['PHP_MYSQL_HOSTNAME'], 'root', $_ENV['MYSQL_ROOT_PASSWORD'], 'hive');
     }
 
     public function getDatabase() {
