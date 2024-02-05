@@ -1,12 +1,6 @@
 pipeline {
-    agent any
+    agent { label '!windows' }
     stages {
-        stage('build') {
-            agent { docker { image 'php:5.6-cli' } }
-            steps {
-                sh 'php --version'
-            }
-        }
         stage('SonarQube') {
             steps {
                 script { 
