@@ -18,7 +18,7 @@
 --
 -- Table structure for table `games`
 --
-CREATE DATABASE hive; 
+CREATE DATABASE IF NOT EXISTS hive; 
 use hive;
 
 DROP TABLE IF EXISTS `games`;
