@@ -8,9 +8,6 @@ pipeline {
             }
         }
         stage('SonarQube') {
-            tools {
-                jdk 'openjdk-17'
-            }
             steps {
                 script { 
                     scannerHome = tool 'SonarQube Scanner'
