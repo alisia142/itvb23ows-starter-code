@@ -9,4 +9,5 @@ return array(
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'Mockery\\' => array($vendorDir . '/mockery/mockery/library/Mockery'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
+    'Alisi\\Itvb23owsStarterCode\\' => array($baseDir . '/src'),
 );

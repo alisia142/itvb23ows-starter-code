@@ -1,6 +1,11 @@
 {
-    "require-dev": {
-        "phpunit/phpunit": "^10.5",
-        "mockery/mockery": "^1.6"
-    }
+    "name": "alisi/itvb23ows-starter-code",
+    "description": "ows code voor hive",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Alisi\\Itvb23owsStarterCode\\": "src/"
+        }
+    },
+    "require": {}
 }
