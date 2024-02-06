@@ -2,6 +2,7 @@
     require_once dirname(__DIR__).'/vendor/autoload.php';
 
     use App\Board;
+    use App\Hand;
 
     session_start();
 
@@ -13,7 +14,8 @@
     /** @var Board $board */
     $board = $_SESSION['board'];
     $player = $_SESSION['player'];
-    $hand = $_SESSION['hand'];
+    /** @var Hand[] $hands */
+    $hands = $_SESSION['hand'];
 
     $to = [];
     foreach (Board::OFFSETS as $pq) {
@@ -116,7 +118,7 @@
         <div class="hand">
             White:
             <?php
-                foreach ($hand[0] as $tile => $ct) {
+                foreach ($hands[0]->getPieces() as $tile => $ct) {
                     for ($i = 0; $i < $ct; $i++) {
                         echo '<div class="tile player0"><span>'.$tile."</span></div> ";
                     }
@@ -126,7 +128,7 @@
         <div class="hand">
             Black:
             <?php
-            foreach ($hand[1] as $tile => $ct) {
+            foreach ($hands[1]->getPieces() as $tile => $ct) {
                 for ($i = 0; $i < $ct; $i++) {
                     echo '<div class="tile player1"><span>'.$tile."</span></div> ";
                 }
@@ -147,7 +149,7 @@
                 <?php
                 $tiles = ["Q","B","S","A","G"];
                 $availableTiles = [];
-                    foreach ($hand[$player] as $tile => $ct) {
+                    foreach ($hands[$player]->getPieces() as $tile => $ct) {
                         if (in_array($tile, $tiles)) {
                             $availableTiles = array_merge($availableTiles, array_fill(0, $ct, $tile));
                         }
@@ -175,7 +177,7 @@
         <form method="post" action="move.php">
             <select name="from">
                 <?php
-                    foreach (array_keys($board->getTiles()) as $pos) {
+                    foreach ($board->getAllPositions() as $pos) {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
