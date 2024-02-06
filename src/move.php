@@ -15,9 +15,6 @@ $board = $_SESSION['board'];
 $hand = $_SESSION['hand'][$player];
 unset($_SESSION['error']);
 
-$gameState = new Game($hand, $board, $player);
-$database = new Database();
-
 if ($board->isPositionEmpty($from)) {
     $_SESSION['error'] = 'Board position is empty';
 } elseif ($board->isTileOwnedByPlayer($from, $player)) {
