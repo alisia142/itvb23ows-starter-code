@@ -65,7 +65,7 @@ class Database
 
     public function findMoveById($id): array
     {
-        $stmt = $this->connection->prepare('SELECT * FROM moves WHERE id = ' . $_SESSION['last_move']);
+        $stmt = $this->connection->prepare('SELECT * FROM moves WHERE id = ' . $id);
         $stmt->execute();
         return $stmt->get_result()->fetch_array();
     }
