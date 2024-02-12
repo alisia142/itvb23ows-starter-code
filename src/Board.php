@@ -38,7 +38,7 @@ class Board
         return array_filter($this->getAllPositions(), fn($pos) => $this->isTileOwnedByPlayer($pos, $player));
     }
 
-    public function isTileOwnedByPlayer(): bool
+    public function isTileOwnedByPlayer($pos, $player): bool
     {
         return $this->tiles[$pos][count($this->tiles[$pos])-1][0] == $player;
     }
