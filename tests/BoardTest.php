@@ -1,8 +1,8 @@
 <?php
 
+use App\Board;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use App\Board;
 
 class BoardTest extends TestCase
 {
