@@ -49,7 +49,7 @@ class Game
         return serialize([
             [
                 0 => $hands[0]->getPieces(),
-                1 => $hand[1]->getPieces(),
+                1 => $hands[1]->getPieces(),
             ], 
             $board->getTiles(), 
             $_SESSION['player']
