@@ -122,7 +122,12 @@ class Pieces
     
                 $pos = $p.','.$q;
                 // is tile al bezocht + pos is niet al geweest + pos is beschikbaar + heeft buren
-                if (!in_array($pos, $visited) && $pos != $previousTile && !isset($this->board[$pos]) && hasNeighBour($this->board, $pos)) {
+                if (
+                    !in_array($pos, $visited) &&
+                    $pos != $previousTile &&
+                    !isset($this->board[$pos]) &&
+                    hasNeighBour($this->board, $pos)
+                ) {
                     if ($pos == $to && $depth == 2) {
                         return true;
                     }
