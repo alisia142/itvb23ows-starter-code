@@ -77,7 +77,10 @@ class Game
             $_SESSION['error'] = 'Board position is not empty';
         } elseif (count($this->board->getTiles()) && !$this->board->hasNeighBour($to)) {
             $_SESSION['error'] = "board position has no neighbour";
-        } elseif ($this->hands[$this->currentPlayer]->getTotalSum() < 11 && !$this->board->neighboursAreSameColor($player, $to)) {
+        } elseif (
+            $this->hands[$this->currentPlayer]->getTotalSum() < 11 &&
+            !$this->board->neighboursAreSameColor($player, $to)
+        ) {
             $_SESSION['error'] = "Board position has opposing neighbour";
         } elseif ($this->hands[$this->currentPlayer]->getTotalSum() <= 8 && $hand->hasPiece('Q')) {
             $_SESSION['error'] = 'Must play queen bee';
