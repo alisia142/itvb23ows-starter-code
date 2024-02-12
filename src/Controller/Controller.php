@@ -38,7 +38,7 @@ class Controller
         unset($_SESSION['error']);
 
         $game = $_SESSION['game'];
-        $game->move($from, $to);        
+        $game->move($from, $to);
 
         return new RedirectResponse("/");
     }
