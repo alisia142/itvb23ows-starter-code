@@ -6,7 +6,7 @@ class Hand
 {
     private array $pieces = ["Q" => 1,"B" => 2,"S" => 2,"A" => 3,"G" => 3];
 
-    public function __construct(array $pieces = null) 
+    public function __construct(array $pieces = null)
     {
         if(isset($pieces)) {
             $this->pieces = $pieces;
