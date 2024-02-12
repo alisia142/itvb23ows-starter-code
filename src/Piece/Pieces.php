@@ -2,9 +2,18 @@
 
 namespace App\Piece;
 
+use App\Board;
+
 class Pieces
 {
-    function validGrasshopper($board, $from, $to) {
+    private Board $board;
+
+    public function __construct(Board $board)
+    {
+        $this->board = $board;
+    }
+
+    function validGrasshopper($from, $to) {
         if ($from === $to) {
             return false;
         }
@@ -40,12 +49,12 @@ class Pieces
         $posExplode = [$p, $q];
     
         // Kijk of de positie buren heeft
-        if (!isset($board[$pos])) {
+        if (!isset($this->board[$pos])) {
             return false;
         }
         
         // Set pos naar eerst mogelijke positie
-        while (isset($board[$pos])) {
+        while (isset($this->board[$pos])) {
             $p = $posExplode[0] + $offset[0];
             $q = $posExplode[1] + $offset[1];
     
@@ -59,27 +68,27 @@ class Pieces
         return false;
     }
     
-    function validAnt($board, $from, $to) {
+    function validAnt($from, $to) {
         if ($from === $to) {
             return false;
         }
         // Ant kan onbeperkt aantal keer verplaatsen dus haal hem van het bord
-        unset($board[$from]);
+        unset($this->board[$from]);
     
         // Kijk of de ant hetzelfde mag als de bijenkoningin
-        if (slide($board, $from, $to)) {
+        if (slide($this->board, $from, $to)) {
             return true;
         }
         
         return false;
     }
     
-    function validSpider($board, $from, $to) {
+    function validSpider($from, $to) {
         if ($from === $to) {
             return false;
         }
         // Spider kan 3 keer verplaatsen dus haal hem van het bord
-        unset($board[$from]);
+        unset($this->board[$from]);
     
         $visited = [];
         $tiles = array($from);
@@ -113,7 +122,7 @@ class Pieces
     
                 $pos = $p.','.$q;
                 // is tile al bezocht + pos is niet al geweest + pos is beschikbaar + heeft buren
-                if (!in_array($pos, $visited) && $pos != $previousTile && !isset($board[$pos]) && hasNeighBour($board, $pos)) {
+                if (!in_array($pos, $visited) && $pos != $previousTile && !isset($this->board[$pos]) && hasNeighBour($this->board, $pos)) {
                     if ($pos == $to && $depth == 2) {
                         return true;
                     }

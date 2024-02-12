@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Pieces;
+
 class Game
 {
     private int $id;
@@ -97,6 +99,7 @@ class Game
     public function move($from, $to): void
     {
         $hand = $this->hands[$this->currentPlayer];
+        $piece = new Pieces($this->board);
 
         if ($this->board->isPositionEmpty($from)) {
             $_SESSION['error'] = 'Board position is empty';
@@ -134,16 +137,19 @@ class Game
                         if (!$this->board->slide($from, $to)) {
                             $_SESSION['error'] = "Tile must slide";
                         }
-                    } 
-                    // elseif ($tile[1] == "G") {
-                    //     if (!validGrasshopper($board, $from, $to)) {
-                    //         $_SESSION['error'] = "Not a valid grasshopper move";
-                    //     }
-                    // } elseif ($tile[1] == "A") {
-                    //     if (!validAnt($board, $from, $to)) {
-                    //         $_SESSION['error'] = "Not a valid ant move";
-                    //     }
-                    // }
+                    } elseif ($tile[1] == "G") {
+                        if (!$piece->validGrasshopper($from, $to)) {
+                            $_SESSION['error'] = "Not a valid grasshopper move";
+                        }
+                    } elseif ($tile[1] == "A") {
+                        if (!$piece->validAnt($from, $to)) {
+                            $_SESSION['error'] = "Not a valid ant move";
+                        }
+                    } elseif ($tile[1] == "S") {
+                        if (!$piece->validSpider($from, $to)) {
+                            $_SESSION['error'] = "Not a valid spider move";
+                        }
+                    }
                 }
             }
             if (isset($_SESSION['error'])) {
