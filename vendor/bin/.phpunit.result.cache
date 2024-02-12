@@ -1,1 +1,1 @@
-{"version":1,"defects":{"DatabaseTest::testCreatedDatabase":8},"times":{"DatabaseTest::testCreatedDatabase":0.46}}
+{"version":1,"defects":{"DatabaseTest::testCreatedDatabase":8,"BoardTest::testPositionsOwnedByPlayerWithProvider#2 queens":8,"BoardTest::testPositionsOwnedByPlayerWithProvider#2 moves for white, 2 moves for black":8},"times":{"DatabaseTest::testCreatedDatabase":0.46,"BoardTest::testPositionsOwnedByPlayerWithProvider#2 queens":0.017,"BoardTest::testPositionsOwnedByPlayerWithProvider#2 moves for white, 2 moves for black":0.004}}

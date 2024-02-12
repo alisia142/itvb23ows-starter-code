@@ -3,7 +3,7 @@
         'name' => 'alisi/itvb23ows-starter-code',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd1cb6086b4e5acb1a4117519f3da1973ea60748d',
+        'reference' => '0f2d71a91848525cd7a25c32faf3a0bf9fc9e63a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'alisi/itvb23ows-starter-code' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd1cb6086b4e5acb1a4117519f3da1973ea60748d',
+            'reference' => '0f2d71a91848525cd7a25c32faf3a0bf9fc9e63a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
