@@ -2,21 +2,21 @@
     require_once dirname(__DIR__).'/vendor/autoload.php';
 
     use App\Board;
-    use App\Hand;
     use App\Database;
+    use App\Game;
 
     session_start();
 
-    if (!isset($_SESSION['board'])) {
-        header('Location: restart.php');
+    if (!isset($_SESSION['game'])) {
+        header('Location: restart');
         exit(0);
     }
 
-    /** @var Board $board */
-    $board = $_SESSION['board'];
-    $player = $_SESSION['player'];
-    /** @var Hand[] $hands */
-    $hands = $_SESSION['hand'];
+    $game = $_SESSION['game'];
+
+    $board = $game->getBoard();
+    $hands = $game->getHands();
+    $currentPlayer = $game->getCurrentPlayer();
 
     $to = [];
     foreach (Board::OFFSETS as $pq) {
@@ -138,44 +138,31 @@
         </div>
         <div class="turn">
             Turn:
-            <?php if ($player == 0) {
+            <?php if ($currentPlayer == 0) {
                 echo "White";
             } else {
                 echo "Black";
             }
             ?>
         </div>
-        <form method="post" action="play.php">
+        <form method="post" action="/play">
             <select name="piece">
                 <?php
-                $tiles = ["Q","B","S","A","G"];
-                $availableTiles = [];
-                    foreach ($hands[$player]->getPieces() as $tile => $ct) {
-                        if (in_array($tile, $tiles)) {
-                            $availableTiles = array_merge($availableTiles, array_fill(0, $ct, $tile));
-                        }
-                    }
-                    foreach ($availableTiles as $tile) {
+                    foreach ($hands[$currentPlayer]->getPieces() as $tile => $ct) {
                         echo "<option value=\"$tile\">$tile</option>";
                     }
                 ?>
             </select>
             <select name="to">
                 <?php
-                    $availablePositions = [];
-                    foreach(array_keys($board) as $availableTile) {
-                        array_push($availablePositions, $availableTile);
-                    }
                     foreach ($to as $pos) {
-                        if (!in_array($pos, $availablePositions)) {
-                            echo "<option value=\"$pos\">$pos</option>";
-                        }
+                        echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
             </select>
             <input type="submit" value="Play">
         </form>
-        <form method="post" action="move.php">
+        <form method="post" action="/move">
             <select name="from">
                 <?php
                     foreach ($board->getAllPositions() as $pos) {
@@ -192,29 +179,29 @@
             </select>
             <input type="submit" value="Move">
         </form>
-        <form method="post" action="pass.php">
+        <form method="post" action="/pass">
             <input type="submit" value="Pass">
         </form>
-        <form method="post" action="restart.php">
+        <form method="post" action="/restart">
             <input type="submit" value="Restart">
         </form>
         <strong>
             <?php
                 if (isset($_SESSION['error'])) {
                     echo $_SESSION['error'];
-                    unset($_SESSION['error']);
                 }
+                unset($_SESSION['error']);
             ?>
         </strong>
         <ol>
             <?php
-                $result = Database::getInstance()->findMovesByGameId($_SESSION['game_id']);
+                $result = Database::getInstance()->findMovesByGameId($game->getId());
                 foreach ($result as $row) {
                     echo '<li>'.$row[2].' '.$row[3].' '.$row[4].'</li>';
                 }
             ?>
         </ol>
-        <form method="post" action="undo.php">
+        <form method="post" action="/undo">
             <input type="submit" value="Undo">
         </form>
     </body>
