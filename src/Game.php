@@ -50,8 +50,8 @@ class Game
             [
                 0 => $hands[0]->getPieces(),
                 1 => $hands[1]->getPieces(),
-            ], 
-            $board->getTiles(), 
+            ],
+            $board->getTiles(),
             $_SESSION['player']
         ]);
     }
@@ -177,5 +177,4 @@ class Game
         );
         $this->currentPlayer = 1 - $this->currentPlayer;
     }
-
 }
