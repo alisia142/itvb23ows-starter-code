@@ -13,7 +13,7 @@ class Pieces
         $this->board = $board;
     }
 
-    function validGrasshopper($from, $to) {
+    public function validGrasshopper($from, $to) {
         if ($from === $to) {
             return false;
         }
@@ -68,7 +68,7 @@ class Pieces
         return false;
     }
     
-    function validAnt($from, $to) {
+    public function validAnt($from, $to) {
         if ($from === $to) {
             return false;
         }
@@ -83,7 +83,7 @@ class Pieces
         return false;
     }
     
-    function validSpider($from, $to) {
+    public function validSpider($from, $to) {
         if ($from === $to) {
             return false;
         }
