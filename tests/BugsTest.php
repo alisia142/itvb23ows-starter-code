@@ -21,6 +21,7 @@ class GrasshopperTest extends TestCase
         $this->assertTrue($valid);
     }
 
+    #[Test]
     public function testValidMoveOnYAxis() {
         $board = new Board([
             '0,0' => [[0, 'G']],
@@ -34,6 +35,7 @@ class GrasshopperTest extends TestCase
         $this->assertTrue($valid);
     }
 
+    #[Test]
     public function testInvalidMoveOnNonStraight() {
         $board = new Board([
             '0,0' => [[0, 'G']],
@@ -64,6 +66,7 @@ class AntTest extends TestCase
         $this->assertTrue($valid);
     }
 
+    #[Test]
     public function testInvalidMoveCurrentToCurrent() {
         $board = new Board([
             '0,0' => [[0, 'A']],
@@ -79,6 +82,7 @@ class AntTest extends TestCase
 
 final class SpiderTest extends TestCase
 {
+    #[Test]
     public function testMoveThreeStepsAway() {
         $board = new Board([
             '1,-1' => [[0, 'S']],
@@ -93,6 +97,7 @@ final class SpiderTest extends TestCase
         $this->assertTrue($valid);
     }
 
+    #[Test]
     public function testMoveMoreThanThreeStepsAway() {
         $board = new Board([
             '1,-1' => [[0, 'S']],
@@ -115,5 +120,3 @@ final class QueenTest extends TestCase {
 final class BeetleTest extends TestCase {
     // TODO: Implement test for beetle
 }
-
-?>
