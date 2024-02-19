@@ -1,78 +1,109 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-include_once('util.php');
+use App\Pieces\Grasshopper;
+use App\Pieces\Ant;
+use App\Pieces\Spider;
 
-final class GrasshopperTest extends TestCase {
-    public function testGrasshopperValid() {
-        $board = [
-            '0,0' => ['W', 'Q'],
-            '1,0' => ['B', 'A'],
-        ];
+class GrasshopperTest extends TestCase 
+{
+    #[Test]
+    public function testValidMoveOnXAxis() {
+        $board = new Board([
+            '0,0' => [[0, 'G']],
+            '0,1' => [[1, 'Q']],
+        ]);
+        $gh = new Grasshopper($board);
         $from = '0,0';
-        $to = '1,1';
+        $to = '0,2';
 
-        $valid = validGrasshopper($board, $from, $to);
+        $valid = $gh->validMove($from, $to);
         $this->assertTrue($valid);
     }
 
-    public function testGrasshopperInvalid() {
-        $board = [
-            '0,0' => ['W', 'Q'],
-            '1,0' => ['B', 'A'],
-        ];
+    public function testValidMoveOnYAxis() {
+        $board = new Board([
+            '0,0' => [[0, 'G']],
+            '1,0' => [[1, 'Q']],
+        ]);
+        $gh = new Grasshopper($board);
         $from = '0,0';
-        $to = '1,2';
+        $to = '2,0';
 
-        $valid = validGrasshopper($board, $from, $to);
-        $this->assertFalse($valid);
+        $valid = $gh->validMove($from, $to);
+        $this->assertTrue($valid);
+    }
+
+    public function testInvalidMoveOnNonStraight() {
+        $board = new Board([
+            '0,0' => [[0, 'G']],
+        ]);
+        $gh = new Grasshopper($board);
+        $from = '0,0';
+        $to = '3,-2';
+
+        $valid = $gh->validMove($from, $to);
+        $this->assertTrue($valid);
     }
 }
 
-final class AntTest extends TestCase {
-    public function testAntValid() {
-        $board = [
-            '0,0' => ['W', 'Q'],
-            '1,0' => ['B', 'A'],
-        ];
+class AntTest extends TestCase 
+{
+    #[Test]
+    public function testValidMoveNextToCurrentLocation() {
+        $board = new Board([
+            '1,-1' => [[0, 'Q']],
+            '0,0' => [[0, 'A']],
+            '1,0' => [[1, 'Q']],
+        ]);
+        $ant = new Ant($board);
         $from = '0,0';
-        $to = '1,1';
+        $to = '0,1';
 
-        $valid = validAnt($board, $from, $to);
+        $valid = $ant->validMove($from, $to);
         $this->assertTrue($valid);
     }
 
-    public function testAntInvalid() {
-        $board = [
-            '0,0' => ['W', 'Q'],
-            '1,0' => ['B', 'A'],
-        ];
+    public function testInvalidMoveCurrentToCurrent() {
+        $board = new Board([
+            '0,0' => [[0, 'A']],
+        ]);
+        $ant = new Ant($board);
         $from = '0,0';
         $to = '0,0';
 
-        $valid = validAnt($board, $from, $to);
+        $valid = $ant->validMove($from, $to);
         $this->assertFalse($valid);
     }
 }
 
-final class SpiderTest extends TestCase {
-    public function testSpiderValid() {
-        $board = [
-            '0,0' => ['W', 'S'],
-            '1,1' => ['B', 'S'],
-        ];
+final class SpiderTest extends TestCase
+{
+    public function testMoveThreeStepsAway() {
+        $board = new Board([
+            '1,-1' => [[0, 'S']],
+            '0,0' => [[0, 'Q']],
+            '1,0' => [[1, 'Q']],
+        ]);
+        $spider = new Spider($board);
+        $from = '1,-1';
+        $to = '-1,1';
 
-        $valid = validSpider($board, '0,0', '0,1') && validSpider($board, '0,1', '1,1') && validSpider($board, '1,0', '1,1');
+        $valid = $spider->validMove($from, $to);
         $this->assertTrue($valid);
     }
 
-    public function testSpiderInvalid() {
-        $board = [
-            '0,0' => ['W', 'S'],
-            '1,1' => ['B', 'S'],
-        ];
+    public function testMoveMoreThanThreeStepsAway() {
+        $board = new Board([
+            '1,-1' => [[0, 'S']],
+            '0,0' => [[0, 'Q']],
+            '1,0' => [[1, 'Q']],
+        ]);
+        $spider = new Spider($board);
+        $from = '1,-1';
+        $to = '0,1';
 
-        $valid = validSpider($board, '0,0', '1,1');
+        $valid = $spider->validMove($from, $to);
         $this->assertFalse($valid);
     }
 }
