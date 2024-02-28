@@ -13,7 +13,7 @@ abstract class Piece
     public static function createPiece($letter, Board $board)
     {
         return match ($letter) {
-            'Q' => new QueenBee($board),
+            'Q' => new Queen($board),
             'B' => new Beetle($board),
             'G' => new Grasshopper($board),
             'A' => new SoldierAnt($board),
