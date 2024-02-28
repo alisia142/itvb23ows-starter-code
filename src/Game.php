@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Pieces;
+use App\Exception\InvalidMove;
 
 class Game
 {
@@ -66,24 +67,26 @@ class Game
         $_SESSION['board'] = new Board($b);
         $_SESSION['player'] = $c;
     }
-
+    /**
+     * @throws InvalidMove
+     */
     public function play($piece, $to): void
     {
         $hand = $this->hands[$this->currentPlayer];
 
         if (!$hand->hasPiece($piece)) {
-            $_SESSION['error'] = "Player does not have tile";
+            throw new InvalidMove("Player does not have tile");
         } elseif (!$this->board->isPositionEmpty($to)) {
-            $_SESSION['error'] = 'Board position is not empty';
+            throw new InvalidMove("Board position is not empty");
         } elseif (count($this->board->getTiles()) && !$this->board->hasNeighBour($to)) {
-            $_SESSION['error'] = "board position has no neighbour";
+            throw new InvalidMove("board position has no neighbour");
         } elseif (
             $this->hands[$this->currentPlayer]->getTotalSum() < 11 &&
             !$this->board->neighboursAreSameColor($player, $to)
         ) {
-            $_SESSION['error'] = "Board position has opposing neighbour";
+            throw new InvalidMove("Board position has opposing neighbour");
         } elseif ($this->hands[$this->currentPlayer]->getTotalSum() <= 8 && $hand->hasPiece('Q')) {
-            $_SESSION['error'] = 'Must play queen bee';
+            throw new InvalidMove("Must play queen bee");
             exit(0);
         } else {
             $this->board->setPosition($to, $this->currentPlayer, $piece);
@@ -105,15 +108,15 @@ class Game
         $piece = new Pieces($this->board);
 
         if ($this->board->isPositionEmpty($from)) {
-            $_SESSION['error'] = 'Board position is empty';
+            throw new InvalidMove("Board position is empty");
         } elseif ($this->board->isTileOwnedByPlayer($from, $this->currentPlayer)) {
-            $_SESSION['error'] = "Tile is not owned by player";
+            throw new InvalidMove("Tile is not owned by player");
         } elseif ($hand->hasPiece('Q')) {
-            $_SESSION['error'] = "Queen bee is not played";
+            throw new InvalidMove("Queen bee is not played");
         } else {
             $tile = $this->board->popTile($from);
             if (!$this->board->hasNeighBour($to)) {
-                $_SESSION['error'] = "Move would split hive";
+                throw new InvalidMove("Move would split hive");
             } else {
                 $all = $this->board->getAllPositions();
                 $queue = [array_shift($all)];
@@ -130,27 +133,27 @@ class Game
                     }
                 }
                 if ($all) {
-                    $_SESSION['error'] = "Move would split hive";
+                    throw new InvalidMove("Move would split hive");
                 } else {
                     if ($from == $to) {
-                        $_SESSION['error'] = "Tile must move";
+                        throw new InvalidMove("Tile must move");
                     } elseif (!$this->board->isPositionEmpty($to) && $tile[1] != "B") {
-                        $_SESSION['error'] = "Tile not empty";
+                        throw new InvalidMove("Tile not empty");
                     } elseif ($tile[1] == "Q" || $tile[1] == "B") {
                         if (!$this->board->slide($from, $to)) {
-                            $_SESSION['error'] = "Tile must slide";
+                            throw new InvalidMove("Tile must slide");
                         }
                     } elseif ($tile[1] == "G") {
                         if (!$piece->validGrasshopper($from, $to)) {
-                            $_SESSION['error'] = "Not a valid grasshopper move";
+                            throw new InvalidMove("Not a valid grasshopper move");
                         }
                     } elseif ($tile[1] == "A") {
                         if (!$piece->validAnt($from, $to)) {
-                            $_SESSION['error'] = "Not a valid ant move";
+                            throw new InvalidMove("Not a valid ant move");
                         }
                     } elseif ($tile[1] == "S") {
                         if (!$piece->validSpider($from, $to)) {
-                            $_SESSION['error'] = "Not a valid spider move";
+                            throw new InvalidMove("Not a valid spider move");
                         }
                     }
                 }

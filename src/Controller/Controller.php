@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Database;
 use App\Game;
+use App\Exception\InvalidMove;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,12 @@ class Controller
         $to = $_POST['to'];
 
         $game = $_SESSION['game'];
-        $game->play($piece, $to);
+        try {
+            $game->play($piece, $to);
+        } catch (InvalidMove $exception) {
+            $_SESSION['error'] = $exception->getMessage();
+        }
+        
 
         return new RedirectResponse("/");
     }
@@ -38,7 +44,12 @@ class Controller
         unset($_SESSION['error']);
 
         $game = $_SESSION['game'];
-        $game->move($from, $to);
+        try {
+            $game->move($from, $to);
+        } catch (InvalidMove $exception) {
+            $_SESSION['error'] = $exception->getMessage();
+        }
+        
 
         return new RedirectResponse("/");
     }
