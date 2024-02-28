@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__DIR__).'/vendor/autoload.php';
+
 use App\Board;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
