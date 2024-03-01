@@ -32,7 +32,7 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         ),
         'A' => 
         array (
-            'Alisi\\Itvb23owsStarterCode\\' => 27,
+            'App\\' => 4,
         ),
     );
 
@@ -61,7 +61,7 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-        'Alisi\\Itvb23owsStarterCode\\' => 
+        'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

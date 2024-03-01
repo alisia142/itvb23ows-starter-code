@@ -12,5 +12,5 @@ return array(
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
-    'Alisi\\Itvb23owsStarterCode\\' => array($baseDir . '/src'),
+    'App\\' => array($baseDir . '/src'),
 );
