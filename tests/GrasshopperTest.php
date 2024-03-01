@@ -4,6 +4,7 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
 use App\Pieces\Grasshopper;
+use App\Board;
 
 class GrasshopperTest extends TestCase 
 {
