@@ -183,4 +183,13 @@ class Game
         );
         $this->currentPlayer = 1 - $this->currentPlayer;
     }
+
+    public function willPass(): bool
+    {
+        $hand = $this->hands[$this->currentPlayer];
+        if (count($hand->getAvailablePieces()) > 0) {
+            return false;
+        }
+        return true;
+    }
 }
