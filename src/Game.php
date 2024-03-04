@@ -16,8 +16,17 @@ class Game
     private array $hands;
     private int $currentPlayer;
     private int $moveCounter;
+    private ?int $lastMoveId; // ? omdat hij null mag zijn
 
-    public function __construct(Database $database, int $id = null, Board $board = null, array $hands = null, int $currentPlayer = 0, int $moveCounter = 0)
+    public function __construct(
+        Database $database,
+        int $id = null,
+        Board $board = null,
+        array $hands = null,
+        int $currentPlayer = 0,
+        int $moveCounter = 0,
+        int $lastMoveId = null
+    )
     {
         $this->database = $database;
         $this->id = $id ?? $this->database->createGame();
@@ -25,6 +34,7 @@ class Game
         $this->hands = $hands ?? [0 => new Hand(), 1 => new Hand()];
         $this->currentPlayer = $currentPlayer;
         $this->moveCounter = $moveCounter;
+        $this->lastMoveId = $lastMoveId;
     }
 
     public function getId(): int
@@ -47,6 +57,16 @@ class Game
         return $this->currentPlayer;
     }
 
+    public function getMoveCounter(): int
+    {
+        return $this->moveCounter;
+    }
+
+    public function getLastMoveId(): int
+    {
+        return $this->lastMoveId;
+    }
+
     public function createFromState(Database $database, string $unserializedState): Game
     {
         $state = unserialize($unserializedState);
@@ -56,6 +76,8 @@ class Game
             $state['board'],
             $state['hands'],
             $state['currentPlayer'],
+            $state['moveCounter'],
+            $state['lastMoveId'],
         );
     }
 
@@ -66,6 +88,8 @@ class Game
             'board' => $this->board,
             'hands' => $this->hands,
             'currentPlayer' => $this->currentPlayer,
+            'moveCounter' => $this->moveCounter,
+            'lastMoveId' => $this->lastMoveId,
         ]);
     }
 
@@ -76,6 +100,8 @@ class Game
         $this->board = $state['board'];
         $this->hands = $state['hands'];
         $this->currentPlayer = $state['currentPlayer'];
+        $this->moveCounter = $state['moveCounter'];
+        $this->lastMoveId = $state['lastMoveId'];
     }
     /**
      * @throws InvalidMove
@@ -98,12 +124,12 @@ class Game
             $this->board->setPosition($to, $this->currentPlayer, $piece);
             $hand->removePiece($piece);
             $this->currentPlayer = 1 - $this->currentPlayer;
-            $_SESSION['last_move'] = $this->database->createMove(
+            $this->lastMoveId = $this->database->createMove(
                 $this->id,
                 "play",
                 $piece,
                 $to,
-                $_SESSION['last_move'],
+                $this->lastMoveId,
                 $this->getState(),
             );
         }
@@ -139,12 +165,12 @@ class Game
             } else {
                 $this->board->pushTile($to, $tile);
                 $this->currentPlayer = 1 - $this->currentPlayer;
-                $_SESSION['last_move'] = $this->database->createMove(
+                $this->lastMoveId = $this->database->createMove(
                     $this->id,
                     "move",
                     $from,
                     $to,
-                    $_SESSION['last_move'],
+                    $this->lastMoveId,
                     $this->getState(),
                 );
             }
@@ -182,7 +208,7 @@ class Game
     {
         $_SESSION['last_move'] = $this->database->createPassMove(
             $this->id,
-            $_SESSION['last_move'],
+            $this->lastMoveId,
             $this->getState(),
         );
         $this->currentPlayer = 1 - $this->currentPlayer;
@@ -199,8 +225,8 @@ class Game
     
     public function undo(): void
     {
-        $result = $this->database->findMoveById($_SESSION['last_move']);
-        $_SESSION['last_move'] = $result[5];
+        $result = $this->database->findMoveById($this->lastMoveId);
+        $this->lastMoveId = $result[5];
         if ($this->willUndo()) {
             throw new InvalidMove('Player cannot undo this instance');
         }
