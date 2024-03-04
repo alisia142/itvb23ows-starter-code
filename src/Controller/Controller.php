@@ -32,7 +32,7 @@ class Controller
         $piece = $_POST['piece'];
         $to = $_POST['to'];
 
-        $game = $_SESSION['game'];
+        $game = Game::createFromState($this->database, $_SESSION['game']);
         try {
             $game->play($piece, $to);
         } catch (InvalidMove $exception) {
@@ -52,7 +52,7 @@ class Controller
 
         unset($_SESSION['error']);
 
-        $game = $_SESSION['game'];
+        $game = Game::createFromState($this->database, $_SESSION['game']);
         try {
             $game->move($from, $to);
         } catch (InvalidMove $exception) {
@@ -67,7 +67,8 @@ class Controller
     {
         session_start();
 
-        $_SESSION['game'] = new Game();
+        $game = new Game($this->database);
+        $_SESSION['game'] = $game->getState();
 
         return new RedirectResponse("/");
     }
@@ -91,8 +92,12 @@ class Controller
     {
         session_start();
 
-        $game = $_SESSION['game'];
-        $game->pass();
+        $game = Game::createFromState($this->database, $_SESSION['game']);
+        try {
+            $game->pass();
+        } catch (InvalidMove $exception) {
+            $_SESSION['error'] = $exception->getMessage();
+        }
 
         return new RedirectResponse("/");
     }
