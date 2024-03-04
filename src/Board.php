@@ -130,4 +130,33 @@ class Board
             len($this->tiles[$to])
         );
     }
+
+    public function hiveSplit($from, $to): bool
+    {
+        $board = clone $this;
+        unset($this->board[$from]);
+
+        if (!board->hasNeighBour($to)) {
+            return true;
+        } else {
+            $all = $this->board->getAllPositions();
+            $queue = [array_shift($all)];
+            while ($queue) {
+                $next = explode(',', array_shift($queue));
+                foreach (Board::OFFSETS as $pq) {
+                    list($p, $q) = $pq;
+                    $p += $next[0];
+                    $q += $next[1];
+                    if (in_array("$p,$q", $all)) {
+                        $queue[] = "$p,$q";
+                        $all = array_diff($all, ["$p,$q"]);
+                    }
+                }
+            }
+            if ($all) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
