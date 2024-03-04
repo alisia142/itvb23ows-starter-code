@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Piece;
+namespace App\Pieces;
 
 use App\Board;
 use Exception;
