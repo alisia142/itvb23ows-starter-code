@@ -15,7 +15,7 @@ class Ant extends Piece
         unset($this->board[$from]);
     
         // Kijk of de ant hetzelfde mag als de bijenkoningin
-        if (slide($this->board, $from, $to)) {
+        if ($board->slide($from, $to)) {
             return true;
         }
         
