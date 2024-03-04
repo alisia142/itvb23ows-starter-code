@@ -189,6 +189,21 @@ class Game
         }
         return true;
     }
+    
+    public function undo(): void
+    {
+        $result = $this->database->findMoveById($_SESSION['last_move']);
+        $_SESSION['last_move'] = $result[5];
+        if ($this->willUndo()) {
+            throw new InvalidMove('Player cannot undo this instance');
+        }
+        $this->setState($result[6]);
+    }
+
+    public function willUndo(): bool
+    {
+        return $this->moveNumber > 0;
+    }
 
     public function getAllToPositions(): array
     {
