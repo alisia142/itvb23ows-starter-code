@@ -5,6 +5,8 @@ namespace App;
 use App\Pieces;
 use App\Exception\InvalidMove;
 
+use Exception;
+
 class Game
 {
     private Database $database;
@@ -120,60 +122,10 @@ class Game
 
     public function move($from, $to): void
     {
-        $hand = $this->hands[$this->currentPlayer];
-        $piece = new Pieces($this->board);
-
-        if ($this->board->isPositionEmpty($from)) {
-            throw new InvalidMove("Board position is empty");
-        } elseif ($this->board->isTileOwnedByPlayer($from, $this->currentPlayer)) {
-            throw new InvalidMove("Tile is not owned by player");
-        } elseif ($hand->hasPiece('Q')) {
-            throw new InvalidMove("Queen bee is not played");
+        [$valid, $err] = $this->validMove($from, $to);
+        if (!$valid) {
+            throw new InvalidMoveException($err);
         } else {
-            $tile = $this->board->popTile($from);
-            if (!$this->board->hasNeighBour($to)) {
-                throw new InvalidMove("Move would split hive");
-            } else {
-                $all = $this->board->getAllPositions();
-                $queue = [array_shift($all)];
-                while ($queue) {
-                    $next = explode(',', array_shift($queue));
-                    foreach (Board::OFFSETS as $pq) {
-                        list($p, $q) = $pq;
-                        $p += $next[0];
-                        $q += $next[1];
-                        if (in_array("$p,$q", $all)) {
-                            $queue[] = "$p,$q";
-                            $all = array_diff($all, ["$p,$q"]);
-                        }
-                    }
-                }
-                if ($all) {
-                    throw new InvalidMove("Move would split hive");
-                } else {
-                    if ($from == $to) {
-                        throw new InvalidMove("Tile must move");
-                    } elseif (!$this->board->isPositionEmpty($to) && $tile[1] != "B") {
-                        throw new InvalidMove("Tile not empty");
-                    } elseif ($tile[1] == "Q" || $tile[1] == "B") {
-                        if (!$this->board->slide($from, $to)) {
-                            throw new InvalidMove("Tile must slide");
-                        }
-                    } elseif ($tile[1] == "G") {
-                        if (!$piece->validGrasshopper($from, $to)) {
-                            throw new InvalidMove("Not a valid grasshopper move");
-                        }
-                    } elseif ($tile[1] == "A") {
-                        if (!$piece->validAnt($from, $to)) {
-                            throw new InvalidMove("Not a valid ant move");
-                        }
-                    } elseif ($tile[1] == "S") {
-                        if (!$piece->validSpider($from, $to)) {
-                            throw new InvalidMove("Not a valid spider move");
-                        }
-                    }
-                }
-            }
             if (isset($_SESSION['error'])) {
                 $this->board->pushTile($from, $tile);
             } else {
@@ -187,9 +139,34 @@ class Game
                     $_SESSION['last_move'],
                 );
             }
-        }
+        }        
     }
+    
+    public function validMove($from, $to): array
+    {
+        $errMessage = null;
 
+        if ($this->board->isPositionEmpty($from)) {
+            $errMessage = "Board position is empty";
+        } elseif ($this->board->isTileOwnedByPlayer($from, $this->currentPlayer)) {
+            $errMessage = "Tile is not owned by player";
+        } elseif ($hand->hasPiece('Q')) {
+            $errMessage = "Queen bee is not played";
+        } elseif ($this->board->hiveSplit($from, $to)) {
+            $errMessage = "Move would split hive";
+        } else {
+            $tile = $this->board->getTileOnPosition($from);
+            try {
+                $piece = Piece::createPiece($tile[1], $this->board);
+                if (!$piece->validMove($from, $to)) {
+                    $errMessage = "Not a valid move";
+                }
+            } catch (Exception $exception) {
+                $errMessage = $exception->getMessage();
+            }
+        }
+        return [$errMessage == null, $errMessage];
+    }
     
     public function pass(): Response
     {
