@@ -78,18 +78,14 @@ class Game
 
         if (!$hand->hasPiece($piece)) {
             throw new InvalidMove("Player does not have tile");
-        } elseif (!$this->board->isPositionEmpty($to)) {
-            throw new InvalidMove("Board position is not empty");
-        } elseif (count($this->board->getTiles()) && !$this->board->hasNeighBour($to)) {
-            throw new InvalidMove("board position has no neighbour");
-        } elseif (
-            $this->hands[$this->currentPlayer]->getSum() < 11 &&
-            !$this->board->neighboursAreSameColor($player, $to)
-        ) {
-            throw new InvalidMove("Board position has opposing neighbour");
-        } elseif ($this->hands[$this->currentPlayer]->getSum() <= 8 && $hand->hasPiece('Q')) {
+        }
+        if ($piece != "Q" && $this->hands[$this->currentPlayer]->getSum() <= 8 && $hand->hasPiece('Q')) {
             throw new InvalidMove("Must play queen bee");
             exit(0);
+        }
+        [$valid, $err] = $this->validPlay($to);
+        if (!$valid) {
+            throw new InvalidMove($err);
         } else {
             $this->board->setPosition($to, $this->currentPlayer, $piece);
             $hand->removePiece($piece);
@@ -102,6 +98,24 @@ class Game
                 $_SESSION['last_move'],
             );
         }
+    }
+
+    public function validPlay($to): array
+    {
+        $errMessage = null;
+
+        if ($this->board->isPositionEmpty($to)) {
+            $errMessage = "Board position is not empty";
+        } elseif (count($this->board->getTiles()) && !$this->board->hasNeighBour($to)) {
+            $errMessage = "Board position has no neighbour";
+        } elseif (
+            $this->hands[$this->currentPlayer]->getSum() < 11 &&
+            !$this->board->neighboursAreSameColor($player, $to)
+        ) {
+            $errMessage = "Board position has opposing neighbour";
+        }
+
+        return [$errMessage = null, $errMessage];
     }
 
     public function move($from, $to): void
@@ -193,5 +207,23 @@ class Game
             return false;
         }
         return true;
+    }
+
+    public function getAllToPositions(): array
+    {
+        $to = [];
+        foreach (Board::OFFSETS as $pq) {
+            foreach ($this->board->getAllPositions() as $pos) {
+                $secondPq = explode(',', $pos);
+                $to[] = ($pq[0] + $secondPq[0]) . ',' . ($pq[1] + $secondPq[1]);
+            }
+        }
+        // geen duplicates
+        $to = array_unique($to);
+        // kijk of het board leeg is
+        if (!count($this->board->getAllPositions())) {
+            $to[] = '0,0';
+        }
+        return $to;
     }
 }
