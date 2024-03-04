@@ -148,7 +148,7 @@
         <form method="post" action="/play">
             <select name="piece">
                 <?php
-                    foreach ($hands[$currentPlayer]->getPieces() as $tile => $ct) {
+                    foreach ($hands[$currentPlayer]->getPossiblePieces() as $tile => $ct) {
                         echo "<option value=\"$tile\">$tile</option>";
                     }
                 ?>

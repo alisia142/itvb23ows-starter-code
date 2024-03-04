@@ -32,4 +32,9 @@ class Hand
     {
         return array_sum($this->pieces);
     }
+
+    public function getPossiblePieces(): array
+    {
+        return array_filter($this->pieces);
+    }
 }
