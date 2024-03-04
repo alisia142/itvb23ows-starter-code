@@ -71,9 +71,12 @@ class Controller
         session_start();
 
         $result = Database::getInstance()->findMoveById($_SESSION['last_move']);
-        $_SESSION['last_move'] = $result[5];
-        $game = $_SESSION['game'];
-        $game->setState($result[6]);
+        try {
+            $game->undo();
+        } catch (InvalidMove $exception) {
+            $_SESSION['error'] = $exception->getMessage();
+        }
+        $_SESSION['game'] = $game->getState();
 
         return new RedirectResponse("/");
     }
