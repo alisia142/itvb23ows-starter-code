@@ -21,12 +21,14 @@ class Spider extends Piece
         // laatst bezochte tile en hoevaak er al is verplaatst
         $previousTile = null;
         $depth = 0;
+
         while(!empty($tiles) && $depth < 3) {
             // krijg de eerste tile
             $tile = array_shift($tiles);
             if ($tile == null) {
                 $depth++;
                 $tiles[] = null;
+                // reset array en geef het eerste element terug
                 if (reset($tiles) == null) {
                     break;
                 } else {
@@ -38,28 +40,22 @@ class Spider extends Piece
                 $visited[] = $tile;
             }
     
-            $b = explode(',', $tile);
-    
-            foreach($GLOBALS['OFFSETS'] as $pq) {
-                $p = $b[0] + $pq[0];
-                $q = $b[1] + $pq[1];
-    
-                $pos = $p.','.$q;
+            foreach($this->getAllNeighbours($tile) as $neighbour) {
                 // is tile al bezocht + pos is niet al geweest + pos is beschikbaar + heeft buren
                 if (
-                    !in_array($pos, $visited) &&
-                    $pos != $previousTile &&
-                    !isset($this->board[$pos]) &&
-                    hasNeighBour($this->board, $pos)
+                    !in_array($neighbour, $visited) &&
+                    $neighbour != $previousTile &&
+                    $this->isPositionEmpty(neighbour) &&
+                    $this->hasNeighbour($neighbour)
                 ) {
-                    if ($pos == $to && $depth == 2) {
+                    if ($neighbour == $to && $depth == 2) {
                         return true;
                     }
-                    $tiles[] = $pos;
+                    $tiles[] = $neighbour;
                 }
                 $previousTile = $tile;
             }
-            return false;
         }
+        return false;
     }
 }
