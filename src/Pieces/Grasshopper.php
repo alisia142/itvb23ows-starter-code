@@ -2,7 +2,7 @@
 
 namespace App\Piece;
 
-use App\Piece;
+use App\Pieces\Piece;
 
 class Grasshopper extends Piece
 {
