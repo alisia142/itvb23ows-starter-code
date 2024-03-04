@@ -99,11 +99,12 @@ class Game
             $hand->removePiece($piece);
             $this->currentPlayer = 1 - $this->currentPlayer;
             $_SESSION['last_move'] = $this->database->createMove(
-                $this,
+                $this->id,
                 "play",
                 $piece,
                 $to,
                 $_SESSION['last_move'],
+                $this->getState(),
             );
         }
         $this->moveCounter += 1;
@@ -139,11 +140,12 @@ class Game
                 $this->board->pushTile($to, $tile);
                 $this->currentPlayer = 1 - $this->currentPlayer;
                 $_SESSION['last_move'] = $this->database->createMove(
-                    $this,
+                    $this->id,
                     "move",
                     $from,
                     $to,
                     $_SESSION['last_move'],
+                    $this->getState(),
                 );
             }
         }
@@ -179,8 +181,9 @@ class Game
     public function pass(): Response
     {
         $_SESSION['last_move'] = $this->database->createPassMove(
-            $this,
+            $this->id,
             $_SESSION['last_move'],
+            $this->getState(),
         );
         $this->currentPlayer = 1 - $this->currentPlayer;
     }

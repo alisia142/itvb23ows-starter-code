@@ -52,27 +52,23 @@ class Database
         return $stmt->get_result()->fetch_all();
     }
 
-    public function createMove($game, $type, $from, $to, $lastMoveId): int
+    public function createMove($gameId, $type, $from, $to, $lastMoveId): int
     {
         $stmt = $this->connection->prepare(
             'insert into moves (game_id, type, move_from, move_to, previous_id, state)
             values (?, "move", ?, ?, ?, ?)'
         );
-        $state = $game->getState();
-        $gameId = $game->getId();
         $stmt->bind_param('isssis', $gameId, $type, $from, $to, $lastMoveId, $state);
         $stmt->execute();
         return $stmt->insert_id;
     }
 
-    public function createPassMove($game, $lastMoveId): int
+    public function createPassMove($gameId, $lastMoveId): int
     {
         $stmt = $this->connection->prepare(
             'insert into moves (game_id, type, move_from, move_to, previous_id, state)
             values (?, "pass", null, null, ?, ?)'
         );
-        $state = $game->getState();
-        $gameId = $game->getId();
         $stmt->bind_param('iis', $gameId, $lastMoveId, $state);
         $stmt->execute();
         return $stmt->insert_id;
