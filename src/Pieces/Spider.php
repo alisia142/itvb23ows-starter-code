@@ -10,7 +10,6 @@ class Spider extends Piece
     {
         $board = clone $this->board;
         $board->removeTile($from);
-
         if ($from == $to) {
             return false;
         } elseif (!$board->isPositionEmpty($to)) {
@@ -20,7 +19,6 @@ class Spider extends Piece
         } elseif (!$board->getTiles()[$to]) {
             return false;
         }
-        
     }
 
     public function destinationReachableInThreeSlides($board, $curr, $dest, $visited = [], $count = 0) {
@@ -29,7 +27,7 @@ class Spider extends Piece
         }
         $neighbours = $board->getNeighbours($curr);
         $availableNeighbours = array_filter($neighbours, fn($neighbour) => $board->isPositionEmpty($neighbour));
-
+        
         foreach ($availableNeighbours as $neighbour) {
             if (in_array($neighbour, $visited)) {
                 continue;
