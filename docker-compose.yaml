@@ -1,12 +1,18 @@
 services:
   web:
-    build: .
+    build: 
+      context: .
+      dockerfile: dockerfile
     ports:
       - "3000:3000"
     volumes:
       - ./itvb23ows-starter-code:/itvb23ows-starter-code/web-1/src
     depends_on:
       - db
+    environment:
+      - PHP_MYSQL_HOSTNAME=${PHP_MYSQL_HOSTNAME}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
   db:
     image: mysql:8.0
     ports:
