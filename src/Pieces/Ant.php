@@ -14,7 +14,7 @@ class Ant extends Piece
             return false;
         }
         // Ant kan onbeperkt aantal keer verplaatsen dus haal hem van het bord
-        unset($this->board[$from]);
+        $board->removeTile($from);
     
         // Kijk of de ant hetzelfde mag als de bijenkoningin
         if ($board->slide($from, $to)) {

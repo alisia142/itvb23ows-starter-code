@@ -139,7 +139,7 @@ class Board
     public function hiveSplit($from, $to): bool
     {
         $board = clone $this;
-        unset($this->board[$from]);
+        $board->removeTile($from);
 
         if (!board->hasNeighBour($to)) {
             return true;

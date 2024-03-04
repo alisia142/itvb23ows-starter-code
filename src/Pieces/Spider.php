@@ -9,7 +9,7 @@ class Spider extends Piece
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
-        unset($this->board[$from]);
+        $board->removeTile($from);
 
         if ($from == $to) {
             return false;

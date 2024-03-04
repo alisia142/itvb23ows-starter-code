@@ -10,7 +10,7 @@ class Beetle extends Piece
     {
         $board = clone $this->board;
 
-        unset($this->board[$from]);
+        $board->removeTile($from);
 
         if ($from == $to) {
             return false;
