@@ -43,6 +43,11 @@ class Board
         return $this->tiles[$pos][count($this->tiles[$pos])-1][0] == $player;
     }
 
+    public function getTileOnPosition($pos): array
+    {
+        return $this->tiles[$pos][count($this->tiles[$pos])-1];
+    }
+
     public function removeTile($pos): array
     {
         return array_pop($this->tiles[$pos]);
