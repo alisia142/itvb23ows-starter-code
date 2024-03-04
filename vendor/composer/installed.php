@@ -3,7 +3,7 @@
         'name' => 'alisi/itvb23ows-starter-code',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '0f2d71a91848525cd7a25c32faf3a0bf9fc9e63a',
+        'reference' => '8287cf7ce0530b7be550d22edfacab636a5bb7d4',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,11 +13,47 @@
         'alisi/itvb23ows-starter-code' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0f2d71a91848525cd7a25c32faf3a0bf9fc9e63a',
+            'reference' => '8287cf7ce0530b7be550d22edfacab636a5bb7d4',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'cordoval/hamcrest-php' => array(
+            'dev_requirement' => true,
+            'replaced' => array(
+                0 => '*',
+            ),
+        ),
+        'davedevelopment/hamcrest-php' => array(
+            'dev_requirement' => true,
+            'replaced' => array(
+                0 => '*',
+            ),
+        ),
+        'hamcrest/hamcrest-php' => array(
+            'pretty_version' => 'v2.0.1',
+            'version' => '2.0.1.0',
+            'reference' => '8c3d0a3f6af734494ad8f6fbbee0ba92422859f3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../hamcrest/hamcrest-php',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'kodova/hamcrest-php' => array(
+            'dev_requirement' => true,
+            'replaced' => array(
+                0 => '*',
+            ),
+        ),
+        'mockery/mockery' => array(
+            'pretty_version' => '1.6.7',
+            'version' => '1.6.7.0',
+            'reference' => '0cc058854b3195ba21dc6b1f7b1f60f4ef3a9c06',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../mockery/mockery',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'myclabs/deep-copy' => array(
             'pretty_version' => '1.11.1',
