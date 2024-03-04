@@ -15,14 +15,16 @@ class Game
     /** @var Hand[] $hands */
     private array $hands;
     private int $currentPlayer;
+    private int $moveCounter;
 
-    public function __construct(Database $database, int $id = null, Board $board = null, array $hands = null, int $currentPlayer = 0)
+    public function __construct(Database $database, int $id = null, Board $board = null, array $hands = null, int $currentPlayer = 0, int $moveCounter = 0)
     {
         $this->database = $database;
         $this->id = $id ?? $this->database->createGame();
         $this->board = $board ?? new Board();
         $this->hands = $hands ?? [0 => new Hand(), 1 => new Hand()];
         $this->currentPlayer = $currentPlayer;
+        $this->moveCounter = $moveCounter;
     }
 
     public function getId(): int
@@ -100,6 +102,7 @@ class Game
                 $_SESSION['last_move'],
             );
         }
+        $this->moveCounter += 1;
     }
 
     public function validPlay($to): array
@@ -139,7 +142,8 @@ class Game
                     $_SESSION['last_move'],
                 );
             }
-        }        
+        }
+        $this->moveCounter += 1;
     }
     
     public function validMove($from, $to): array
