@@ -12,7 +12,7 @@ pipeline {
             }
         }
         stage('Unit Tests') {
-            agent { docker { image 'php:8.3-cli'} }
+            agent { docker { image 'php:5.6-cli'} }
             steps {
                 sh 'vendor/bin/phpunit'
                 xunit([
