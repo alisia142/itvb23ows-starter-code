@@ -38,14 +38,16 @@ class Database
 
     public function findMoveById($id): array
     {
-        $stmt = $this->connection->prepare('SELECT * FROM moves WHERE id = ' . $id);
+        $stmt = $this->connection->prepare('SELECT * FROM moves WHERE id = ?');
+        $stmt->bind_param('i', $id);
         $stmt->execute();
         return $stmt->get_result()->fetch_array();
     }
 
     public function findMoveByGame($gameId): array
     {
-        $stmt = $this->connection->prepare('SELECT * FROM moves WHERE game_id = ' . $gameId);
+        $stmt = $this->connection->prepare('SELECT * FROM moves WHERE game_id = ?');
+        $stmt->bind_param('i', $id);
         $stmt->execute();
         return $stmt->get_result()->fetch_all();
     }
