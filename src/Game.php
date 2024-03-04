@@ -203,4 +203,9 @@ class Game
         }
         return $to;
     }
+
+    public function getPlayPositions(): array
+    {
+        return array_filter($this->getAllToPositions(), fn($pos) => $this->validPlay($pos)[0]);
+    }
 }
