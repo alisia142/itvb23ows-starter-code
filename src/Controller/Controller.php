@@ -13,7 +13,10 @@ class Controller
 {
     public function index(): Response
     {
-        return render_template("index");
+        ob_start();
+        include __DIR__ . '../index.php';
+        $content = ob_get_clean();
+        return new Response($content);
     }
 
     public function play(): Response
