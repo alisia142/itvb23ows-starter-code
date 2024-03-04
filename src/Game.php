@@ -47,31 +47,35 @@ class Game
         return $this->currentPlayer;
     }
 
+    public function createFromState(Database $database, string $unserializedState): Game
+    {
+        $state = unserialize($unserializedState);
+        return new Game(
+            $database,
+            $state['id'],
+            $state['board'],
+            $state['hands'],
+            $state['currentPlayer'],
+        );
+    }
+
     public static function getState(): string
     {
-        /** @var Board $board */
-        $board = $_SESSION['board'];
-        /** @var Hand[] $hands */
-        $hands = $_SESSION['hand'];
         return serialize([
-            [
-                0 => $hands[0]->getPieces(),
-                1 => $hands[1]->getPieces(),
-            ],
-            $board->getTiles(),
-            $_SESSION['player']
+            'id' => $this->id,
+            'board' => $this->board,
+            'hands' => $this->hands,
+            'currentPlayer' => $this->currentPlayer,
         ]);
     }
 
-    public static function setState($state): void
+    public static function setState($unserializedState): void
     {
-        list($a, $b, $c) = unserialize($state);
-        $_SESSION['hand'] = [
-            0 => new Hand($a[0]),
-            1 => new Hand($a[1]),
-        ];
-        $_SESSION['board'] = new Board($b);
-        $_SESSION['player'] = $c;
+        $state = serialize($unserializedState);
+        $this->id = $state['id'];
+        $this->board = $state['board'];
+        $this->hands = $state['hands'];
+        $this->currentPlayer = $state['currentPlayer'];
     }
     /**
      * @throws InvalidMove
