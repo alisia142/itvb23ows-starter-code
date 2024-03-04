@@ -155,7 +155,7 @@
             </select>
             <select name="to">
                 <?php
-                    foreach ($to as $pos) {
+                    foreach ($game->getPlayPositions as $pos) {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
@@ -172,7 +172,7 @@
             </select>
             <select name="to">
                 <?php
-                    foreach ($to as $pos) {
+                    foreach ($game->getAllToPositions as $pos) {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
