@@ -2,6 +2,8 @@
 
 namespace App\Piece;
 
+use App\Piece;
+
 class Ant extends Piece
 {
     public function validMove($from, $to): bool
