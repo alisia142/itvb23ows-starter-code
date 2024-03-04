@@ -165,7 +165,7 @@
         <form method="post" action="/move">
             <select name="from">
                 <?php
-                    foreach ($board->getAllPositions() as $pos) {
+                    foreach ($board->getAllPositionsOwnedByPlayer($currentPlayer) as $pos) {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
