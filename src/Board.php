@@ -164,4 +164,20 @@ class Board
         }
         return false;
     }
+
+    public function getNeighbours($pos, $filter = null): array
+    {
+        $neighbours = [];
+        [$x, $y] = explode(',', $pos);
+        foreach (self::OFFSETS as [$dx, $dy]) {
+            $nx = $x + $dx;
+            $ny = $y + $dy;
+            $neighbour = "$nx,$ny";
+
+            if (!isset($filter) || $filter($neighbour)) {
+                $neighbours[] = $neighbour;
+            }
+        }
+        return $neighbours;
+    }
 }
