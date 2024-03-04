@@ -7,15 +7,17 @@ use App\Exception\InvalidMove;
 
 class Game
 {
+    private Database $database;
     private int $id;
     private Board $board;
     /** @var Hand[] $hands */
     private array $hands;
     private int $currentPlayer;
 
-    public function __construct(Board $board = null, array $hands = null, int $currentPlayer = 0)
+    public function __construct(Database $database, int $id = null, Board $board = null, array $hands = null, int $currentPlayer = 0)
     {
-        $this->id = Database::getInstance()->createGame();
+        $this->database = $database;
+        $this->id = $id ?? $this->database->createGame();
         $this->board = $board ?? new Board();
         $this->hands = $hands ?? [0 => new Hand(), 1 => new Hand()];
         $this->currentPlayer = $currentPlayer;
