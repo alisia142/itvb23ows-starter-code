@@ -1,8 +1,13 @@
-# syntax=docker/dockerfile:1
+FROM php:8.3
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-FROM php:5.6
-COPY . /src
-WORKDIR /src
+EXPOSE 8000
+
+RUN apt-get update && apt-get clean
+
 RUN docker-php-ext-install mysqli
-CMD ["php", "-S", "0.0.0.0:3000"]
-EXPOSE 3000
+
+WORKDIR /app
+COPY . /app
+
+CMD [ "php", "-S", "0.0.0.0:8000", "-t", "src"]
