@@ -1,5 +1,5 @@
 pipeline {
-    agent { label '!windows' }
+    agent any
     stages {
         stage('SonarQube') {
             steps {
@@ -12,6 +12,7 @@ pipeline {
             }
         }
         stage('Unit Tests') {
+            agent { docker { image 'php:8.3'} }
             steps {
                 sh 'vendor/bin/phpunit'
                 xunit([
