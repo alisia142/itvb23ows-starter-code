@@ -146,7 +146,7 @@ class Game
             $errMessage = "Board position has no neighbour";
         } elseif (
             $this->hands[$this->currentPlayer]->getSum() < 11 &&
-            !$this->board->neighboursAreSameColor($player, $to)
+            !$this->board->neighboursAreTheSameColor($player, $to)
         ) {
             $errMessage = "Board position has opposing neighbour";
         }

@@ -16,7 +16,7 @@ abstract class Piece
             'Q' => new Queen($board),
             'B' => new Beetle($board),
             'G' => new Grasshopper($board),
-            'A' => new SoldierAnt($board),
+            'A' => new Ant($board),
             'S' => new Spider($board),
             default => throw new Exception("Letter does not exist as piece."),
         };

@@ -86,7 +86,7 @@ class Board
         }
     }
 
-    public function neighboursAreSameColor($player, $a): bool
+    public function neighboursAreTheSameColor($player, $a): bool
     {
         foreach ($this->tiles as $b => $st) {
             if (!$st) {
