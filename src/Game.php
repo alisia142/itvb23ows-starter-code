@@ -17,6 +17,7 @@ class Game
     private int $currentPlayer;
     private int $moveCounter;
     private ?int $lastMoveId; // ? omdat hij null mag zijn
+    private Ai $aiMove;
 
     public function __construct(
         Database $database,
@@ -25,7 +26,8 @@ class Game
         array $hands = null,
         int $currentPlayer = 0,
         int $moveCounter = 0,
-        int $lastMoveId = null
+        int $lastMoveId = null,
+        Ai $aiMove,
     )
     {
         $this->database = $database;
@@ -35,6 +37,7 @@ class Game
         $this->currentPlayer = $currentPlayer;
         $this->moveCounter = $moveCounter;
         $this->lastMoveId = $lastMoveId;
+        $this->aiMove = $aiMove;
     }
 
     public function getId(): int
@@ -67,7 +70,7 @@ class Game
         return $this->lastMoveId;
     }
 
-    public function createFromState(Database $database, string $unserializedState): Game
+    public function createFromState(Database $database, Ai $aiMove, string $unserializedState): Game
     {
         $state = unserialize($unserializedState);
         return new Game(
@@ -78,6 +81,7 @@ class Game
             $state['currentPlayer'],
             $state['moveCounter'],
             $state['lastMoveId'],
+            $aiMove,
         );
     }
 
@@ -106,32 +110,35 @@ class Game
     /**
      * @throws InvalidMove
      */
-    public function play($piece, $to): void
+    public function play($piece, $to, $ai = false): void
     {
         $hand = $this->hands[$this->currentPlayer];
 
-        if (!$hand->hasPiece($piece)) {
-            throw new InvalidMove("Player does not have tile");
+        // if AI play is true, force play
+        if (!$ai) {
+            if (!$hand->hasPiece($piece)) {
+                throw new InvalidMove("Player does not have tile");
+            }
+            if ($piece != "Q" && $this->hands[$this->currentPlayer]->getSum() <= 8 && $hand->hasPiece('Q')) {
+                throw new InvalidMove("Must play queen bee");
+            }
+            [$valid, $err] = $this->validPlay($to);
+            if (!$valid) {
+                throw new InvalidMove($err);
+            } 
         }
-        if ($piece != "Q" && $this->hands[$this->currentPlayer]->getSum() <= 8 && $hand->hasPiece('Q')) {
-            throw new InvalidMove("Must play queen bee");
-        }
-        [$valid, $err] = $this->validPlay($to);
-        if (!$valid) {
-            throw new InvalidMove($err);
-        } else {
-            $this->board->setPosition($to, $this->currentPlayer, $piece);
-            $hand->removePiece($piece);
-            $this->currentPlayer = 1 - $this->currentPlayer;
-            $this->lastMoveId = $this->database->createMove(
-                $this->id,
-                "play",
-                $piece,
-                $to,
-                $this->lastMoveId,
-                $this->getState(),
-            );
-        }
+
+        $this->board->setPosition($to, $this->currentPlayer, $piece);
+        $hand->removePiece($piece);
+        $this->currentPlayer = 1 - $this->currentPlayer;
+        $this->lastMoveId = $this->database->createMove(
+            $this->id,
+            "play",
+            $piece,
+            $to,
+            $this->lastMoveId,
+            $this->getState(),
+        );
         $this->moveCounter += 1;
     }
 
@@ -153,27 +160,27 @@ class Game
         return [$errMessage = null, $errMessage];
     }
 
-    public function move($from, $to): void
+    public function move($from, $to, $ai = false): void
     {
-        [$valid, $err] = $this->validMove($from, $to);
-        if (!$valid) {
-            throw new InvalidMoveException($err);
-        } else {
-            if (isset($_SESSION['error'])) {
-                $this->board->pushTile($from, $tile);
-            } else {
-                $this->board->pushTile($to, $tile);
-                $this->currentPlayer = 1 - $this->currentPlayer;
-                $this->lastMoveId = $this->database->createMove(
-                    $this->id,
-                    "move",
-                    $from,
-                    $to,
-                    $this->lastMoveId,
-                    $this->getState(),
-                );
+        // if AI move true, force move
+        if (!$ai) {
+            [$valid, $err] = $this->validMove($from, $to);
+            if (!$valid) {
+                throw new InvalidMoveException($err);
             }
         }
+        
+        $tile = $this->board->removeTile($from);
+        $this->board->pushTile($to, $tile);
+        $this->currentPlayer = 1 - $this->currentPlayer;
+        $this->lastMoveId = $this->database->createMove(
+            $this->id,
+            "move",
+            $from,
+            $to,
+            $this->lastMoveId,
+            $this->getState(),
+        );
         $this->moveCounter += 1;
     }
     
@@ -203,8 +210,11 @@ class Game
         return [$errMessage == null, $errMessage];
     }
     
-    public function pass(): Response
+    public function pass($ai = false): Response
     {
+        if (!$ai && !$this->willPass()) {
+            throw new InvalidMove("Player cannot pass");
+        }
         $_SESSION['last_move'] = $this->database->createPassMove(
             $this->id,
             $this->lastMoveId,
@@ -258,5 +268,19 @@ class Game
     public function getPlayPositions(): array
     {
         return array_filter($this->getAllToPositions(), fn($pos) => $this->validPlay($pos)[0]);
+    }
+
+    public function executeAiMove(): void
+    {
+        $move = $this->ai->createSuggestion($moveCounter, $hands, $board);
+        if ($move[0] == 'play') {
+            $this->play($move[1], $move[2], true);
+        } elseif ($move[0] == 'move') {
+            $this->move($move[1], $move[2], true);
+        } elseif ($move[0] == 'pass') {
+            $this->pass(true);
+        } else {
+            throw new InvalidMove('Requested move does not exist.');
+        }
     }
 }
