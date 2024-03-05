@@ -1,12 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage('Install Dependencies') {
-            agent { docker { image 'composer:2.6'}}
-            steps {
-                sh 'composer install --ignore-platform-reqs'
-            }
-        }
+        // stage('Install Dependencies') {
+        //     agent { docker { image 'composer:2.6'} }
+        //     steps {
+        //         sh 'composer install --ignore-platform-reqs'
+        //     }
+        // }
         stage('SonarQube') {
             steps {
                 script { 
@@ -32,6 +32,8 @@ pipeline {
                 ])
             }
         }
+        
+        
     }
 }
 
