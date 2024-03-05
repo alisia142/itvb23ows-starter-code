@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use App\Pieces\Ant;
 use App\Board;
 
-class AntTest extends TestCase 
+class AntTest extends TestCase
 {
     #[Test]
     public function testValidMoveNextToCurrentLocation() {

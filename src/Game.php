@@ -115,7 +115,6 @@ class Game
         }
         if ($piece != "Q" && $this->hands[$this->currentPlayer]->getSum() <= 8 && $hand->hasPiece('Q')) {
             throw new InvalidMove("Must play queen bee");
-            exit(0);
         }
         [$valid, $err] = $this->validPlay($to);
         if (!$valid) {

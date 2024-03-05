@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use App\Pieces\Grasshopper;
 use App\Board;
 
-class GrasshopperTest extends TestCase 
+class GrasshopperTest extends TestCase
 {
     #[Test]
     public function testValidMoveOnXAxis() {
