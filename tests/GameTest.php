@@ -22,7 +22,7 @@ class GameTest extends TestCase
             1 => new Hand([]),
         ];
         $currentPlayer = 0;
-        $game = new Game($dbMock, $aiMoveMock, -1, $board, $hands, $currentPlayer);
+        $game = new Game($dbMock, -1, $board, $hands, $currentPlayer, $aiMoveMock);
 
         $pass = $game->willPass();
 
