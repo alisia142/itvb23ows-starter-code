@@ -30,7 +30,7 @@ class GrasshopperTest extends TestCase
         ]);
         $gh = new Grasshopper($board);
         $from = '0,0';
-        $to = '2,0';
+        $to = '1,1';
 
         $valid = $gh->validMove($from, $to);
         $this->assertTrue($valid);
