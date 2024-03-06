@@ -46,6 +46,6 @@ class GrasshopperTest extends TestCase
         $to = '3,-2';
 
         $valid = $gh->validMove($from, $to);
-        $this->assertTrue($valid);
+        $this->assertFalse($valid);
     }
 }
