@@ -80,7 +80,7 @@ class Board
     public function hasNeighBour($a): bool
     {
         foreach (array_keys($this->tiles) as $b) {
-            if (isNeighbour($a, $b)) {
+            if ($this->isNeighbour($a, $b)) {
                 return true;
             }
         }
@@ -128,11 +128,11 @@ class Board
             return false;
         }
         return min(
-            len($this->tiles[$common[0]]),
-            len($this->tiles[$common[1]])
+            $this->len($this->tiles[$common[0]]),
+            $this->len($this->tiles[$common[1]])
         ) <= max(
-            len($this->tiles[$from]),
-            len($this->tiles[$to])
+            $this->len($this->tiles[$from]),
+            $this->len($this->tiles[$to])
         );
     }
 
