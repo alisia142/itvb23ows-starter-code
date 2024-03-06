@@ -9,14 +9,19 @@ class Ant extends Piece
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
-        
+        // is positie to gelijk aan from
         if ($from === $to) {
             return false;
         }
-        // Ant kan onbeperkt aantal keer verplaatsen dus haal hem van het bord
-        $board->removeTile($from);
-    
-        // Kijk of de ant hetzelfde mag als de bijenkoningin
+        // is positie to empty
+        if (!$board->isPositionEmpty($to)) {
+            return false;
+        }
+        $neighbours = $board->getNeighbours($from);
+        if (!in_array($to, $neighbours)) {
+            return false;
+        }
+        // kijk of de mier kan schuiven naar zijn bestemming
         if ($board->slide($from, $to)) {
             return true;
         }
