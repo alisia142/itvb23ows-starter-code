@@ -107,7 +107,7 @@ class Board
 
     public function slide($from, $to): bool
     {
-        if (!$this->hasNeighBour($to, $board) || !$this>isNeighbour($from, $to)) {
+        if (!$this->hasNeighBour($to, $board) || !$this->isNeighbour($from, $to)) {
             return false;
         }
         $b = explode(',', $to);
