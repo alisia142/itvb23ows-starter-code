@@ -14,11 +14,10 @@ class Spider extends Piece
             return false;
         } elseif (!$board->isPositionEmpty($to)) {
             return false;
-        } elseif (!$board->isNeighbour($from, $to)) {
+        } elseif (!$this->destinationReachableInThreeSlides($board, $from, $to)) {
             return false;
-        } elseif (!$board->getTiles()[$to]) {
-            return false;
-        }
+        } 
+        return true;
     }
 
     public function destinationReachableInThreeSlides($board, $curr, $dest, $visited = [], $count = 0) {

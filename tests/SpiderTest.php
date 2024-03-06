@@ -9,7 +9,7 @@ use App\Board;
 final class SpiderTest extends TestCase
 {
     #[Test]
-    public function testMoveThreeStepsAway() {
+    public function testMoveThreeSteps() {
         $board = new Board([
             '1,-1' => [[0, 'S']],
             '0,0' => [[0, 'Q']],
@@ -24,7 +24,7 @@ final class SpiderTest extends TestCase
     }
 
     #[Test]
-    public function testMoveMoreThanThreeStepsAway() {
+    public function testMoveMoreThanThreeSteps() {
         $board = new Board([
             '1,-1' => [[0, 'S']],
             '0,0' => [[0, 'Q']],

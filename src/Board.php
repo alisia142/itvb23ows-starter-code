@@ -84,6 +84,7 @@ class Board
                 return true;
             }
         }
+        return false;
     }
 
     public function neighboursAreTheSameColor($player, $a): bool

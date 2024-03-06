@@ -13,7 +13,7 @@ class Beetle extends Piece
         if ($from === $to) {
             return false;
         }
-        // verwijder de kever van het board
+        // verwijder de kever van het bord
         $board->removeTile($from);
         // kijk of de kever maar 1 stap zet
         [$fromX, $fromY] = explode(',', $from);
