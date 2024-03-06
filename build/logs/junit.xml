@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="QueenTest" file="C:\Personal\Jaar 4\Ontwikkelstraten\itvb23ows-starter-code\tests\QueenTest.php" tests="1" assertions="0" errors="1" failures="0" skipped="0" time="0.021680">
+    <testcase name="testValidMoveOnXAxis" file="C:\Personal\Jaar 4\Ontwikkelstraten\itvb23ows-starter-code\tests\QueenTest.php" line="12" class="QueenTest" classname="QueenTest" assertions="0" time="0.021680">
+      <error type="Error">QueenTest::testValidMoveOnXAxis&#13;
+Error: Call to undefined function App\isNeighbour()
+&#13;
+C:\Personal\Jaar 4\Ontwikkelstraten\itvb23ows-starter-code\src\Board.php:83
+C:\Personal\Jaar 4\Ontwikkelstraten\itvb23ows-starter-code\src\Board.php:110
+C:\Personal\Jaar 4\Ontwikkelstraten\itvb23ows-starter-code\src\Pieces\Queen.php:17
+C:\Personal\Jaar 4\Ontwikkelstraten\itvb23ows-starter-code\tests\QueenTest.php:22</error>
+    </testcase>
+  </testsuite>
+</testsuites>
