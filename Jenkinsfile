@@ -1,28 +1,29 @@
 pipeline {
-    // agent any
-    // stages {
-        // stage('Install Dependencies') {
-        //     agent { docker { image 'composer:2.6'} }
-        //     steps {
-        //         sh 'composer install --ignore-platform-reqs'
-        //     }
-        // }
-        // stage('SonarQube') {
-        //     steps {
-        //         script { 
-        //             scannerHome = tool 'SonarQube Scanner'
-        //             withSonarQubeEnv('SonarQube') {
-        //                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube"
-        //             }
-        //         }
-        //     }
-        // }
-    agent any
+    agent {
+        docker { 
+            image 'php:8.3-cli'
+        }
+    }
     stages {
         stage('build') {
-            agent { docker { image 'php:8.3-cli'} }
             steps {
                 sh 'php --version'
+            }
+        }
+        stage('Install Dependencies') {
+            agent { docker { image 'composer:2.6'} }
+            steps {
+                sh 'composer install --ignore-platform-reqs'
+            }
+        }
+        stage('SonarQube') {
+            steps {
+                script { 
+                    scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube"
+                    }
+                }
             }
         }
         stage('Unit Tests') {
