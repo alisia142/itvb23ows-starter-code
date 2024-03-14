@@ -17,11 +17,7 @@ pipeline {
         //         }
         //     }
         // }
-    agent {
-        docker { 
-            image 'php:8.3-cli'
-        }
-    }
+    agent any
     stages {
         stage('build') {
             steps {
