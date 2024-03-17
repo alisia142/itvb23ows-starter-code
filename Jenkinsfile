@@ -1,11 +1,12 @@
 pipeline {
-    agent {
-        docker { 
-            image 'php:8.3-cli'
-        }
-    }
+    agent any
     stages {
         stage('build') {
+            agent {
+                docker { 
+                    image 'php:8.3-cli'
+                }
+            }
             steps {
                 sh 'php --version'
             }
