@@ -2,9 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-final class StringTest extends TestCase
+final class FirstTest extends TestCase
 {
-    public function ttestIsString(): void
+    public function testIsString(): void
     {
         $value = "Dit is een string";
         $this->assertIsString($value);
