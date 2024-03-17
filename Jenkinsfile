@@ -18,16 +18,6 @@ pipeline {
                 stash name: 'vendor', includes: 'vendor/**'
             }
         }
-        stage('SonarQube') {
-            steps {
-                script { 
-                    scannerHome = tool 'SonarQube Scanner'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube"
-                    }
-                }
-            }
-        }
         stage('Unit Tests') {
             agent { docker { image 'php:8.3-cli'} }
             steps {
@@ -42,6 +32,16 @@ pipeline {
                         PHPUnit(pattern: 'build/logs/junit.xml', stopProcessingIfError: true, failIfNotNew: true)
                     ]
                 ])
+            }
+        }
+        stage('SonarQube') {
+            steps {
+                script { 
+                    scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube"
+                    }
+                }
             }
         }
     }
