@@ -15,6 +15,7 @@ pipeline {
             agent { docker { image 'composer:2.6'} }
             steps {
                 sh 'composer install --ignore-platform-reqs'
+                stash name: 'vendor', includes: 'vendor/**'
             }
         }
         stage('SonarQube') {
@@ -30,6 +31,7 @@ pipeline {
         stage('Unit Tests') {
             agent { docker { image 'php:8.3-cli'} }
             steps {
+                unstash name: 'vendor'
                 sh 'vendor/bin/phpunit'
                 xunit([
                     thresholds: [
