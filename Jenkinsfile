@@ -17,16 +17,16 @@ pipeline {
         //         sh 'composer install --ignore-platform-reqs'
         //     }
         // }
-        // stage('SonarQube') {
-        //     steps {
-        //         script { 
-        //             scannerHome = tool 'SonarQube Scanner'
-        //             withSonarQubeEnv('SonarQube') {
-        //                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('SonarQube') {
+            steps {
+                script { 
+                    scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=SonarQube"
+                    }
+                }
+            }
+        }
         stage('Unit Tests') {
             agent { docker { image 'php:8.3-cli'} }
             steps {
