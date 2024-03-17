@@ -26,21 +26,21 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Unit Tests') {
-        //     agent { docker { image 'php:8.3-cli'} }
-        //     steps {
-        //         sh 'vendor/bin/phpunit'
-        //         xunit([
-        //             thresholds: [
-        //                 failed ( failureThreshold: "0" ),
-        //                 skipped ( unstableThreshold: "0" )
-        //             ],
-        //             tools: [
-        //                 PHPUnit(pattern: 'build/logs/junit.xml', stopProcessingIfError: true, failIfNotNew: true)
-        //             ]
-        //         ])
-        //     }
-        // }
+        stage('Unit Tests') {
+            agent { docker { image 'php:8.3-cli'} }
+            steps {
+                sh 'vendor/bin/phpunit'
+                xunit([
+                    thresholds: [
+                        failed ( failureThreshold: "0" ),
+                        skipped ( unstableThreshold: "0" )
+                    ],
+                    tools: [
+                        PHPUnit(pattern: 'build/logs/junit.xml', stopProcessingIfError: true, failIfNotNew: true)
+                    ]
+                ])
+            }
+        }
     }
 }
 
