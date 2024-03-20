@@ -80,7 +80,7 @@ class Controller
     {
         session_start();
 
-        $result = Database::getInstance()->findMoveById($_SESSION['last_move']);
+        $game = Database::getInstance()->findMoveById($_SESSION['last_move']);
         try {
             $game->undo();
         } catch (InvalidMove $exception) {
