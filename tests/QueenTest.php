@@ -8,7 +8,9 @@ use App\Board;
 
 class QueenTest extends TestCase
 {
-    #[TEST]
+    /**
+     @test
+     */
     public function testValidMoveOnXAxis()
     {
         $board = new Board([

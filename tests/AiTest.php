@@ -14,9 +14,10 @@ class AiTest extends Testcase
 {
     use MockeryPHPUnitIntegration;
 
-    #[Test]
-    public function checkIfSuggestionHasCorrectParameters()
-    {
+    /**
+     @test
+     */
+    public function checkIfSuggestionHasCorrectParameters() {
         $guzzleSpy = Mockery::spy(Client::class);
         $guzzleSpy->allows('post')->andReturn(new Response());
         

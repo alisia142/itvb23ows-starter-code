@@ -11,7 +11,9 @@ use PHPUnit\Framework\TestCase;
 
 class GameTest extends TestCase
 {
-    #[Test]
+    /**
+     @test
+     */
     public function ifGivenNoValidPlayOrMoveThenTrue()
     {
         $dbMock = Mockery::mock(Database::class);

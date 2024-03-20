@@ -8,7 +8,9 @@ use App\Board;
 
 class AntTest extends TestCase
 {
-    #[Test]
+    /**
+     @test
+     */
     public function testValidMoveNextToCurrentLocation() {
         $board = new Board([
             '1,-1' => [[0, 'Q']],
@@ -23,7 +25,9 @@ class AntTest extends TestCase
         $this->assertTrue($valid);
     }
 
-    #[Test]
+    /**
+     @test
+     */
     public function testInvalidMoveCurrentToCurrent() {
         $board = new Board([
             '0,0' => [[0, 'A']],

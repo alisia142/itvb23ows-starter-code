@@ -8,7 +8,9 @@ use App\Board;
 
 final class SpiderTest extends TestCase
 {
-    #[Test]
+    /**
+     @test
+     */
     public function testMoveThreeSteps() {
         $board = new Board([
             '1,-1' => [[0, 'S']],
@@ -23,7 +25,9 @@ final class SpiderTest extends TestCase
         $this->assertTrue($valid);
     }
 
-    #[Test]
+    /**
+     @test
+     */
     public function testMoveMoreThanThreeSteps() {
         $board = new Board([
             '1,-1' => [[0, 'S']],
