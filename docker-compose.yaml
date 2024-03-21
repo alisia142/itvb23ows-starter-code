@@ -2,7 +2,7 @@ services:
   web:
     build: 
       context: .
-      dockerfile: ai.dockerfile
+      dockerfile: app.dockerfile
     ports:
       - "3000:3000"
     volumes:
