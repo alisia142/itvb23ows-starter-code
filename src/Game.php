@@ -10,6 +10,7 @@ use Exception;
 class Game
 {
     private Database $database;
+    private Ai $aiMove;
     private int $id;
     private Board $board;
     /** @var Hand[] $hands */
@@ -17,27 +18,26 @@ class Game
     private int $currentPlayer;
     private int $moveCounter;
     private ?int $lastMoveId; // ? omdat hij null mag zijn
-    private Ai $aiMove;
 
     public function __construct(
         Database $database,
+        Ai $aiMove,
         int $id = null,
         Board $board = null,
         array $hands = null,
         int $currentPlayer = 0,
         int $moveCounter = 0,
         int $lastMoveId = null,
-        Ai $aiMove,
     )
     {
         $this->database = $database;
+        $this->aiMove = $aiMove;
         $this->id = $id ?? $this->database->createGame();
         $this->board = $board ?? new Board();
         $this->hands = $hands ?? [0 => new Hand(), 1 => new Hand()];
         $this->currentPlayer = $currentPlayer;
         $this->moveCounter = $moveCounter;
         $this->lastMoveId = $lastMoveId;
-        $this->aiMove = $aiMove;
     }
 
     public function getId(): int
@@ -70,22 +70,22 @@ class Game
         return $this->lastMoveId;
     }
 
-    public function createFromState(Database $database, Ai $aiMove, string $unserializedState): Game
+    public static function createFromState(Database $database, Ai $aiMove, string $unserializedState): Game
     {
         $state = unserialize($unserializedState);
         return new Game(
             $database,
+            $aiMove,
             $state['id'],
             $state['board'],
             $state['hands'],
             $state['currentPlayer'],
             $state['moveCounter'],
             $state['lastMoveId'],
-            $aiMove,
         );
     }
 
-    public static function getState(): string
+    public function getState(): string
     {
         return serialize([
             'id' => $this->id,
@@ -146,7 +146,7 @@ class Game
     {
         $errMessage = null;
 
-        if ($this->board->isPositionEmpty($to)) {
+        if (!$this->board->isPositionEmpty($to)) {
             $errMessage = "Board position is not empty";
         } elseif (count($this->board->getTiles()) && !$this->board->hasNeighBour($to)) {
             $errMessage = "Board position has no neighbour";
@@ -157,7 +157,7 @@ class Game
             $errMessage = "Board position has opposing neighbour";
         }
 
-        return [$errMessage = null, $errMessage];
+        return [$errMessage == null, $errMessage];
     }
 
     public function move($from, $to, $ai = false): void
@@ -272,7 +272,7 @@ class Game
 
     public function executeAiMove(): void
     {
-        $move = $this->ai->createSuggestion($moveCounter, $hands, $board);
+        $move = $this->aiMove->createSuggestion($this->moveCounter, $this->hands, $this->board);
         if ($move[0] == 'play') {
             $this->play($move[1], $move[2], true);
         } elseif ($move[0] == 'move') {

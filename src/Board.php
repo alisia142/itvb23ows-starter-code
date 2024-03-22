@@ -15,6 +15,7 @@ class Board
 
     public function getTiles(): array
     {
+        var_dump($this->tiles);
         return $this->tiles;
     }
 
@@ -142,7 +143,7 @@ class Board
         $board = clone $this;
         $board->removeTile($from);
 
-        if (!board->hasNeighBour($to)) {
+        if (!$board->hasNeighBour($to)) {
             return true;
         } else {
             $all = $this->board->getAllPositions();

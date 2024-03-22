@@ -23,7 +23,7 @@ class Controller
     public function index(): Response
     {
         ob_start();
-        include __DIR__ . '../index.php';
+        include __DIR__ . '../../index.php';
         $content = ob_get_clean();
         return new Response($content);
     }
@@ -70,7 +70,7 @@ class Controller
     {
         session_start();
 
-        $game = new Game($this->database);
+        $game = new Game($this->database, $this->aiMove);
         $_SESSION['game'] = $game->getState();
 
         return new RedirectResponse("/");

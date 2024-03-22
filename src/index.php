@@ -1,9 +1,8 @@
 <?php
-    require_once dirname(__DIR__).'/vendor/autoload.php';
-
     use App\Board;
     use App\Database;
     use App\Game;
+    use App\Ai;
 
     session_start();
 
@@ -14,7 +13,7 @@
 
     $database = new Database();
     $aiMove = new Ai();
-    $game = Game::createFromState($database, $ai, $_SESSION['game']);
+    $game = Game::createFromState($database, $aiMove, $_SESSION['game']);
 
     $board = $game->getBoard();
     $hands = $game->getHands();
@@ -153,7 +152,7 @@
         <form method="post" action="/play">
             <select name="piece">
                 <?php
-                    foreach ($hands[$currentPlayer]->getPossiblePieces() as $tile => $ct) {
+                    foreach ($hands[$currentPlayer]->getPieces() as $tile => $ct) {
                         echo "<option value=\"$tile\">$tile</option>";
                     }
                 ?>
@@ -200,7 +199,7 @@
         </strong>
         <ol>
             <?php
-                $result = $database->findMovesByGameId($game->getId());
+                $result = $database->findMovesByGame($game->getId());
                 foreach ($result as $row) {
                     echo '<li>'.$row[2].' '.$row[3].' '.$row[4].'</li>';
                 }

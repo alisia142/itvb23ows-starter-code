@@ -44,7 +44,7 @@ class Database
         return $stmt->get_result()->fetch_array();
     }
 
-    public function findMoveByGame($gameId): array
+    public function findMovesByGame($gameId): array
     {
         $stmt = $this->connection->prepare('SELECT * FROM moves WHERE game_id = ?');
         $stmt->bind_param('i', $id);
@@ -56,7 +56,7 @@ class Database
     {
         $stmt = $this->connection->prepare(
             'insert into moves (game_id, type, move_from, move_to, previous_id, state)
-            values (?, "move", ?, ?, ?, ?)'
+            values (?, ?, ?, ?, ?, ?)'
         );
         $stmt->bind_param('isssis', $gameId, $type, $from, $to, $lastMoveId, $state);
         $stmt->execute();

@@ -8,14 +8,14 @@ class Ai
 {
     private Client $client;
 
-    public function __construct__(Client $client)
+    public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
     public function createSuggestion($moveNumber, $hands, $board): array
     {
-        $response = $this->client->request('POST', '', [
+        $response = $this->client->post('', [
             'json' => [
                 'move_number' => $moveNumber,
                 'hand' => [
