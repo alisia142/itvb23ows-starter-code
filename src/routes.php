@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 use App\Controller\Controller;
 
 $routes = [
