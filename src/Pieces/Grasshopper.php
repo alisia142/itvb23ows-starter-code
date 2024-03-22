@@ -10,12 +10,8 @@ class Grasshopper extends Piece
     {
         $board = clone $this->board;
         
-        // is positie to gelijk aan from
-        if ($from === $to) {
-            return false;
-        }
-        // is positie to empty
-        if (!$board->isPositionEmpty($to)) {
+        // is positie to gelijk aan from OF is positie op het bord leeg
+        if ($from === $to || (!$board->isPositionEmpty($to))) {
             return false;
         }
         // kijk of er over minstens 1 steen wordt gesprongen

@@ -47,7 +47,7 @@ class Database
     public function findMovesByGame($gameId): array
     {
         $stmt = $this->connection->prepare('SELECT * FROM moves WHERE game_id = ?');
-        $stmt->bind_param('i', $id);
+        $stmt->bind_param('i', $gameId);
         $stmt->execute();
         return $stmt->get_result()->fetch_all();
     }

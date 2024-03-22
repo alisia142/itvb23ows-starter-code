@@ -9,12 +9,8 @@ class Ant extends Piece
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
-        // is positie to gelijk aan from
-        if ($from === $to) {
-            return false;
-        }
-        // is positie to empty
-        if (!$board->isPositionEmpty($to)) {
+        // is positie to gelijk aan from OF is positie op het bord leeg
+        if ($from === $to || (!$board->isPositionEmpty($to))) {
             return false;
         }
         $neighbours = $board->getNeighbours($from);

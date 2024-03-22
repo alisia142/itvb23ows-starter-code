@@ -9,8 +9,8 @@ class Beetle extends Piece
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
-        // is positie to gelijk aan from
-        if ($from === $to) {
+        // is positie to gelijk aan from OF is positie op het bord leeg
+        if ($from === $to || (!$board->isPositionEmpty($to))) {
             return false;
         }
         // verwijder de kever van het bord
@@ -21,10 +21,6 @@ class Beetle extends Piece
         $distanceX = abs($toX - $fromX);
         $distanceY = abs($toY - $fromY);
         if ($distanceX != 1 || $distanceY != 1) {
-            return false;
-        }
-        // is positie to empty
-        if (!$board->isPositionEmpty($to)) {
             return false;
         }
         return true;

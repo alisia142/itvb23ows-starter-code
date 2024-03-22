@@ -29,7 +29,7 @@ try {
     }
 } catch (Exception $exception) {
     $response = new Response('An error occurred', 500);
-    print($exception->getMessage());
+    print $exception->getMessage();
 }
 
 $response->send();

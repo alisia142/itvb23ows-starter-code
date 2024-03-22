@@ -10,13 +10,13 @@ class Spider extends Piece
     {
         $board = clone $this->board;
         $board->removeTile($from);
-        if ($from == $to) {
+        // is positie to gelijk aan from OF is positie op het bord leeg
+        if ($from === $to || (!$board->isPositionEmpty($to))) {
             return false;
-        } elseif (!$board->isPositionEmpty($to)) {
+        }
+        if (!$this->destinationReachableInThreeSlides($board, $from, $to)) {
             return false;
-        } elseif (!$this->destinationReachableInThreeSlides($board, $from, $to)) {
-            return false;
-        } 
+        }
         return true;
     }
 

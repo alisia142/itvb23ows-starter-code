@@ -125,7 +125,7 @@ class Game
             [$valid, $err] = $this->validPlay($to);
             if (!$valid) {
                 throw new InvalidMove($err);
-            } 
+            }
         }
 
         $this->board->setPosition($to, $this->currentPlayer, $piece);
@@ -187,6 +187,7 @@ class Game
     public function validMove($from, $to): array
     {
         $errMessage = null;
+        $hand = $this->hands[$this->currentPlayer];
 
         if ($this->board->isPositionEmpty($from)) {
             $errMessage = "Board position is empty";

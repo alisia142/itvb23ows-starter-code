@@ -15,7 +15,7 @@ class Controller
     private Database $database;
     private Ai $aiMove;
 
-    public function __construct(Database $database, Ai $aiMove) 
+    public function __construct(Database $database, Ai $aiMove)
     {
         $this->database = $database;
         $this->aiMove = $aiMove;
