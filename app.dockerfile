@@ -10,4 +10,4 @@ RUN docker-php-ext-install mysqli
 WORKDIR /app
 COPY . /app
 
-CMD [ "php", "-S", "0.0.0.0:8000", "-t", "src"]
+CMD [ "php", "-S", "0.0.0.0:3000", "-t", "public"]
