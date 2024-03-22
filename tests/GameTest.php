@@ -11,9 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class GameTest extends TestCase
 {
-    /**
-     @test
-     */
+    #[Test]
     public function ifGivenNoValidPlayOrMoveThenTrue()
     {
         $dbMock = Mockery::mock(Database::class);
@@ -24,7 +22,7 @@ class GameTest extends TestCase
             1 => new Hand([]),
         ];
         $currentPlayer = 0;
-        $game = new Game($dbMock, -1, $board, $hands, $currentPlayer, 0, 0, $aiMoveMock);
+        $game = new Game($dbMock, $aiMoveMock, -1, $board, $hands, $currentPlayer, 0, 0);
 
         $pass = $game->willPass();
 

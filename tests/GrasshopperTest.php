@@ -8,9 +8,7 @@ use App\Board;
 
 class GrasshopperTest extends TestCase
 {
-    /**
-     @test
-     */
+    #[Test]
     public function testValidMoveOnXAxis() {
         $board = new Board([
             '0,0' => [[0, 'G']],
@@ -24,9 +22,7 @@ class GrasshopperTest extends TestCase
         $this->assertTrue($valid);
     }
 
-    /**
-     @test
-     */
+    #[Test]
     public function testValidMoveOnYAxis() {
         $board = new Board([
             '0,0' => [[0, 'G']],
@@ -40,9 +36,7 @@ class GrasshopperTest extends TestCase
         $this->assertTrue($valid);
     }
 
-    /**
-     @test
-     */
+    #[Test]
     public function testInvalidMoveOnNonStraight() {
         $board = new Board([
             '0,0' => [[0, 'G']],

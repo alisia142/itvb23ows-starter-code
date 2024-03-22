@@ -18,8 +18,9 @@ class AiTest extends Testcase
      @test
      */
     public function checkIfSuggestionHasCorrectParameters() {
+        $responseMock = new Response(200, [], json_encode(["play", "B", "0,0"]));
         $guzzleSpy = Mockery::spy(Client::class);
-        $guzzleSpy->allows('post')->andReturn(new Response());
+        $guzzleSpy->allows('post')->andReturn($responseMock);
         
         $ai = new Ai($guzzleSpy);
         $moveNumber = 1;

@@ -8,9 +8,7 @@ use App\Board;
 
 class BeetleTest extends TestCase
 {
-    /**
-     @test
-     */
+    #[Test]
     public function testInvalidMove()
     {
         $board = new Board([

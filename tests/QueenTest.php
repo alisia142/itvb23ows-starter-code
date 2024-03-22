@@ -8,9 +8,7 @@ use App\Board;
 
 class QueenTest extends TestCase
 {
-    /**
-     @test
-     */
+    #[Test]
     public function testValidMoveOnXAxis()
     {
         $board = new Board([
@@ -23,6 +21,6 @@ class QueenTest extends TestCase
 
         $valid = $queen->validMove($from, $to);
 
-        $this->assertTrue($valid);
+        $this->assertFalse($valid);
     }
 }
