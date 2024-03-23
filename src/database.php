@@ -29,6 +29,7 @@ class Database
         );
     }
 
+    // create game by executing insert statement
     public function createGame(): int
     {
         $stmt = $this->connection->prepare('INSERT INTO games VALUES ()');
@@ -36,6 +37,7 @@ class Database
         return $stmt->insert_id;
     }
 
+    // find move based on given id
     public function findMoveById($id): array
     {
         $stmt = $this->connection->prepare('SELECT * FROM moves WHERE id = ?');
@@ -44,6 +46,7 @@ class Database
         return $stmt->get_result()->fetch_array();
     }
 
+    // find all moves based on gameId
     public function findMovesByGame($gameId): array
     {
         $stmt = $this->connection->prepare('SELECT * FROM moves WHERE game_id = ?');
@@ -52,6 +55,7 @@ class Database
         return $stmt->get_result()->fetch_all();
     }
 
+    // create move by inserting move into moves
     public function createMove($gameId, $type, $from, $to, $lastMoveId): int
     {
         $stmt = $this->connection->prepare(
@@ -63,6 +67,7 @@ class Database
         return $stmt->insert_id;
     }
 
+    // create pass by inserting pass into moves
     public function createPassMove($gameId, $lastMoveId): int
     {
         $stmt = $this->connection->prepare(

@@ -9,6 +9,7 @@ abstract class Piece
 {
     /**
      * @throws Exception
+     * helper function for creating a new piece, prevents double segments of code
      */
     public static function createPiece($letter, Board $board)
     {

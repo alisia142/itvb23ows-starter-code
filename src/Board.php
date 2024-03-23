@@ -13,47 +13,68 @@ class Board
         $this->tiles = $tiles;
     }
 
+    // returnes tiles
     public function getTiles(): array
     {
-        var_dump($this->tiles);
         return $this->tiles;
     }
 
+    // returnes if position is empty
     public function isPositionEmpty($pos): bool
     {
         return !isset($this->tiles[$pos]);
     }
 
+    // set tile to [player, piece]
     public function setPosition($pos, $player, $piece): void
     {
         $this->tiles[$pos] = [[$player, $piece]];
     }
 
+    // returnes all positions
     public function getAllPositions(): array
     {
         return array_keys($this->tiles);
     }
 
+    /**
+     * returnes all positions that are owned by player
+     * array_filter -> filters all positions on tile owned by player, given position and player
+    */
     public function getAllPositionsOwnedByPlayer($player): array
     {
         return array_filter($this->getAllPositions(), fn($pos) => $this->isTileOwnedByPlayer($pos, $player));
     }
 
+    /**
+     * returnes if tile is owned by player, given position and player
+     * counts tiles of positions and checks if the first element is equal to player
+     */
     public function isTileOwnedByPlayer($pos, $player): bool
     {
         return $this->tiles[$pos][count($this->tiles[$pos])-1][0] == $player;
     }
 
+    /**
+     * returnes tile that is on given position
+     * counts tile on given position
+     */
     public function getTileOnPosition($pos): array
     {
         return $this->tiles[$pos][count($this->tiles[$pos])-1];
     }
 
+    // removes tile from tiles on given position
     public function removeTile($pos): array
     {
         return array_pop($this->tiles[$pos]);
     }
 
+    /**
+     * adds tile to tiles on given position and tile
+     * checks if position is empty, if true then tiles[pos] is set to empty. 
+     * then tile is pushed into tiles[pos]
+     */
     public function addTile($pos, $tile): void
     {
         if ($this->isPositionEmpty($pos)) {
@@ -62,6 +83,7 @@ class Board
         array_push($this->tiles[$pos], $tile);
     }
 
+    // returns if a is neighbour of b
     private function isNeighbour($a, $b): bool
     {
         $a = explode(',', $a);
@@ -78,6 +100,7 @@ class Board
         return false;
     }
 
+    // returns if a has neighbour
     public function hasNeighBour($a): bool
     {
         foreach (array_keys($this->tiles) as $b) {
@@ -88,6 +111,7 @@ class Board
         return false;
     }
 
+    // returns if neighbours of a are the same color as player
     public function neighboursAreTheSameColor($player, $a): bool
     {
         foreach ($this->tiles as $b => $st) {
@@ -102,11 +126,18 @@ class Board
         return true;
     }
 
+    // returns length of tile
     public function len($tile): int
     {
         return $tile ? count($tile) : 0;
     }
 
+    /**
+     * returns if its possible to slide from "from" to "to"
+     * does multiple checks:
+     * - checks neighbours
+     * - calculates common neighbours
+    */
     public function slide($from, $to): bool
     {
         if (!$this->hasNeighBour($to, $board) || !$this->isNeighbour($from, $to)) {
@@ -138,6 +169,7 @@ class Board
         );
     }
 
+    // checks if move will split hive
     public function hiveSplit($from, $to): bool
     {
         $board = clone $this;
@@ -167,6 +199,7 @@ class Board
         return false;
     }
 
+    // returns all neighbours based on given position
     public function getNeighbours($pos, $filter = null): array
     {
         $neighbours = [];

@@ -6,10 +6,16 @@ use App\Pieces\Piece;
 
 class Ant extends Piece
 {
+    /**
+     * valid move based on given parameters:
+     * - can move unlimited times
+     * - move is like queen
+     * - can't move to place that is starting position
+     * - can only move to and over empty tiles
+     */
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
-        // is positie to gelijk aan from OF is positie op het bord leeg
         if ($from === $to || (!$board->isPositionEmpty($to))) {
             return false;
         }
@@ -17,11 +23,9 @@ class Ant extends Piece
         if (!in_array($to, $neighbours)) {
             return false;
         }
-        // kijk of de mier kan schuiven naar zijn bestemming
         if ($board->slide($from, $to)) {
             return true;
         }
-        
         return false;
     }
 }

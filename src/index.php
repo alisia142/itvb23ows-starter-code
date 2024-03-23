@@ -12,7 +12,7 @@
     }
 
     $database = new Database();
-    $aiMove = new Ai();
+    $aiMove = new Ai(new Client(), $_SESSION['game']);
     $game = Game::createFromState($database, $aiMove, $_SESSION['game']);
 
     $board = $game->getBoard();

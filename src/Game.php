@@ -40,36 +40,43 @@ class Game
         $this->lastMoveId = $lastMoveId;
     }
 
+    // returns id
     public function getId(): int
     {
         return $this->id;
     }
 
+    // returns board
     public function getBoard(): Board
     {
         return $this->board;
     }
 
+    // returns hands
     public function getHands(): array
     {
         return $this->hands;
     }
 
+    // returns current player
     public function getCurrentPlayer(): int
     {
         return $this->currentPlayer;
     }
 
+    // returns move counter
     public function getMoveCounter(): int
     {
         return $this->moveCounter;
     }
 
+    // returns id of last move
     public function getLastMoveId(): int
     {
         return $this->lastMoveId;
     }
 
+    // create new game object with database and ai
     public static function createFromState(Database $database, Ai $aiMove, string $unserializedState): Game
     {
         $state = unserialize($unserializedState);
@@ -85,6 +92,7 @@ class Game
         );
     }
 
+    // returns current state of game object
     public function getState(): string
     {
         return serialize([
@@ -97,6 +105,7 @@ class Game
         ]);
     }
 
+    // set current state of game object
     public static function setState($unserializedState): void
     {
         $state = serialize($unserializedState);
@@ -109,12 +118,13 @@ class Game
     }
     /**
      * @throws InvalidMove
+     * executes play based on given parameters
+     * if AI is true, skip the validation and force the play of ai
      */
     public function play($piece, $to, $ai = false): void
     {
         $hand = $this->hands[$this->currentPlayer];
 
-        // if AI play is true, force play
         if (!$ai) {
             if (!$hand->hasPiece($piece)) {
                 throw new InvalidMove("Player does not have tile");
@@ -142,6 +152,7 @@ class Game
         $this->moveCounter += 1;
     }
 
+    // helper function for play to see if play is valid
     public function validPlay($to): array
     {
         $errMessage = null;
@@ -160,9 +171,13 @@ class Game
         return [$errMessage == null, $errMessage];
     }
 
+    /**
+     * @throws InvalidMove
+     * executes move based on given parameters
+     * if AI is true, skip the validation and force the move of ai
+     */
     public function move($from, $to, $ai = false): void
     {
-        // if AI move true, force move
         if (!$ai) {
             [$valid, $err] = $this->validMove($from, $to);
             if (!$valid) {
@@ -184,6 +199,7 @@ class Game
         $this->moveCounter += 1;
     }
     
+    // helper function for move to see if move is valid
     public function validMove($from, $to): array
     {
         $errMessage = null;
@@ -210,7 +226,12 @@ class Game
         }
         return [$errMessage == null, $errMessage];
     }
-    
+
+    /**
+     * @throws InvalidMove
+     * executes pass
+     * if AI is true, skip the validation and force the pass of ai
+     */
     public function pass($ai = false): Response
     {
         if (!$ai && !$this->willPass()) {
@@ -224,6 +245,7 @@ class Game
         $this->currentPlayer = 1 - $this->currentPlayer;
     }
 
+    // helper function for pass to check if player has no more pieces left
     public function willPass(): bool
     {
         $hand = $this->hands[$this->currentPlayer];
@@ -233,6 +255,11 @@ class Game
         return true;
     }
     
+    /**
+     * @throws InvalidMove
+     * executes undo
+     * finds last move via database and checks if move can be undone
+     */
     public function undo(): void
     {
         $result = $this->database->findMoveById($this->lastMoveId);
@@ -243,11 +270,13 @@ class Game
         $this->setState($result[6]);
     }
 
+    // helper function for undo to check if movenumber > 0. If not, move can not be undone
     public function willUndo(): bool
     {
         return $this->moveNumber > 0;
     }
 
+    // returns all "to" positions without duplicates
     public function getAllToPositions(): array
     {
         $to = [];
@@ -257,20 +286,20 @@ class Game
                 $to[] = ($pq[0] + $secondPq[0]) . ',' . ($pq[1] + $secondPq[1]);
             }
         }
-        // geen duplicates
         $to = array_unique($to);
-        // kijk of het board leeg is
         if (!count($this->board->getAllPositions())) {
             $to[] = '0,0';
         }
         return $to;
     }
 
+    // returns all possible play positions based on all "to" positions that are valid
     public function getPlayPositions(): array
     {
         return array_filter($this->getAllToPositions(), fn($pos) => $this->validPlay($pos)[0]);
     }
 
+    // creates suggestions from ai and executes play, move or pass based on first element of $move
     public function executeAiMove(): void
     {
         $move = $this->aiMove->createSuggestion($this->moveCounter, $this->hands, $this->board);

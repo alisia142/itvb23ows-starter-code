@@ -6,6 +6,12 @@ use App\Ai;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * render_template takes a route name, and parses it with the route, to ensure that the page can be loaded
+ * after that, the routes are fetched by routes.php and creates a response with the route based on the path given
+ * then, if the route exists, a new database and a new ai is created, and the new controller (with variabeles) is saved in response. 
+ * if there is no error, the response will be send.
+ */
 function render_template(string $name): Response
 {
     ob_start();

@@ -20,6 +20,7 @@ class Controller
         $this->database = $database;
         $this->aiMove = $aiMove;
     }
+    // load index.php
     public function index(): Response
     {
         ob_start();
@@ -28,6 +29,7 @@ class Controller
         return new Response($content);
     }
 
+    // execute play in game class based on piece and to 
     public function play(): Response
     {
         session_start();
@@ -46,6 +48,7 @@ class Controller
         return new RedirectResponse("/");
     }
 
+    // execute move in game class based on from and to
     public function move(): Response
     {
         session_start();
@@ -66,6 +69,7 @@ class Controller
         return new RedirectResponse("/");
     }
 
+    // restart game using $game session
     public function restart(): Response
     {
         session_start();
@@ -76,6 +80,7 @@ class Controller
         return new RedirectResponse("/");
     }
 
+    // undo last move using game undo
     public function undo(): Response
     {
         session_start();
@@ -91,6 +96,7 @@ class Controller
         return new RedirectResponse("/");
     }
 
+    // execute pass in game class
     public function pass(): Response
     {
         session_start();
@@ -105,6 +111,7 @@ class Controller
         return new RedirectResponse("/");
     }
 
+    // execute ai move in game class
     public function aiMove(): Response
     {
         session_start();

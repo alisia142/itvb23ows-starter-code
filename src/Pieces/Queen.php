@@ -6,20 +6,22 @@ use App\Pieces\Piece;
 
 class Queen extends Piece
 {
+    /**
+     * valid move based on given parameters:
+     * - can move 1 step at the time
+     * - can't move to starting position
+     * - must be played within turn 4
+     */
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
-        // is positie to gelijk aan from
         if ($from === $to) {
             return false;
         }
-        // verwijder de bijenkoningin van het bord
         $board->removeTile($from);
-        // kijk of de bijenkoningin kan schuiven
         if (!$board->slide($from, $to)) {
             return false;
         }
-        // controleer de tussenliggende posities
         $currPos = $from;
         [$fromX, $fromY] = explode(',', $from);
         [$toX, $toY] = explode(',', $to);

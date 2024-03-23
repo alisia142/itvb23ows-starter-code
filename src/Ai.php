@@ -13,6 +13,7 @@ class Ai
         $this->client = $client;
     }
 
+    // created suggestion based on the move number, given hands and given board
     public function createSuggestion($moveNumber, $hands, $board): array
     {
         $response = $this->client->post('', [

@@ -6,11 +6,18 @@ use App\Pieces\Piece;
 
 class Spider extends Piece
 {
+    /**
+     * valid move based on given parameters:
+     * - can move in exactly 3 steps
+     * - move is like queen
+     * - can't move to starting position
+     * - can only move over and to empty tiles
+     * - can't move to tile that has been visited
+     */
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
         $board->removeTile($from);
-        // is positie to gelijk aan from OF is positie op het bord leeg
         if ($from === $to || (!$board->isPositionEmpty($to))) {
             return false;
         }
