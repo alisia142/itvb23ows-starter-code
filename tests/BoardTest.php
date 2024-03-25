@@ -33,13 +33,25 @@ class BoardTest extends TestCase
     #[DataProvider('provider')]
     public function testPositionsOwnedByPlayerWithProvider($tiles, $currentPlayer)
     {
-        // arrange
         $board = new Board($tiles);
-        // act
         $ownedPos = $board->getAllPositionsOwnedByPlayer($currentPlayer);
-        // assert
         foreach ($ownedPos as $pos) {
             $this->assertTrue($board->isTileOwnedByPlayer($pos, $currentPlayer));
         }
+    }
+
+    #[Test]
+    public function testBoardInitialization()
+    {
+        $initialTiles = [
+            '0,0' => [[0, '']],
+            '0,1' => [[1, '']],
+            '1,0' => [[0, '']],
+            '1,1' => [[1, '']],
+        ];
+        
+        $board = new Board($initialTiles);
+        
+        $this->assertEquals($initialTiles, $board->getTiles());
     }
 }
