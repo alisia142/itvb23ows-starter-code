@@ -24,4 +24,5 @@ class BeetleTest extends TestCase
 
         $this->assertFalse($valid);
     }
+
 }

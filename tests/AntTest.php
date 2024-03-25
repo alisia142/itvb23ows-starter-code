@@ -23,6 +23,7 @@ class AntTest extends TestCase
         $this->assertTrue($valid);
     }
 
+    #[Test]
     public function testInvalidMoveCurrentToCurrent() {
         $board = new Board([
             '0,0' => [[0, 'A']],

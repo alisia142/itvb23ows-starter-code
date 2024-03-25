@@ -3,6 +3,7 @@
 namespace App\Pieces;
 
 use App\Pieces\Piece;
+use App\Board;
 
 class Spider extends Piece
 {
@@ -18,7 +19,7 @@ class Spider extends Piece
     {
         $board = clone $this->board;
         $board->removeTile($from);
-        if ($from === $to || (!$board->isPositionEmpty($to))) {
+        if ($from == $to || (!$board->isPositionEmpty($to))) {
             return false;
         }
         if (!$this->destinationReachableInThreeSlides($board, $from, $to)) {
@@ -29,12 +30,11 @@ class Spider extends Piece
 
     public function destinationReachableInThreeSlides($board, $curr, $dest, $visited = [], $count = 0) {
         if ($curr == $dest && $count == 3) {
-            return false;
+            return true;
         }
-        $neighbours = $board->getNeighbours($curr);
-        $availableNeighbours = array_filter($neighbours, fn($neighbour) => $board->isPositionEmpty($neighbour));
+        $neighbours = $board->getNeighbours($curr, fn($neighbour) => $board->isPositionEmpty($neighbour));
         
-        foreach ($availableNeighbours as $neighbour) {
+        foreach ($neighbours as $neighbour) {
             if (in_array($neighbour, $visited)) {
                 continue;
             }

@@ -17,25 +17,24 @@ class Grasshopper extends Piece
     public function validMove($from, $to): bool
     {
         $board = clone $this->board;
-        
-        if ($from === $to || (!$board->isPositionEmpty($to))) {
+
+        if ($from == $to || !$board->isPositionEmpty($to)) {
             return false;
         }
+
         $neighboursFrom = $board->getNeighbours($from);
         $neighboursTo = $board->getNeighbours($to);
-        $tilesJumped = array_diff($neighboursFrom, $neighboursTo);
-        if (empty($tilesJumped)) {
-            return false;
+
+        foreach ($neighboursFrom as $neighbour) {
+            if (!in_array($neighbour, $neighboursTo) && !$board->isPositionEmpty($to)) {
+                return true;
+            }
         }
 
         $fromC = explode(',', $from);
         $toC = explode(',', $to);
         $dist = abs($toC[0] - $fromC[0]) + abs($toC[1] - $fromC[1]);
-        if ($dist != 1) {
-            return false;
-        }
-        
-        if (!in_array($to, $neighboursFrom)) {
+        if ($dist != 2) {
             return false;
         }
 
