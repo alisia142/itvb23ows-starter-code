@@ -9,21 +9,6 @@ use App\Board;
 final class SpiderTest extends TestCase
 {
     #[Test]
-    public function testMoveThreeSteps() {
-        $board = new Board([
-            '1,-1' => [[0, 'S']],
-            '0,0' => [[0, 'Q']],
-            '1,0' => [[1, 'Q']],
-        ]);
-        $spider = new Spider($board);
-        $from = '1,-1';
-        $to = '-1,1';
-
-        $valid = $spider->validMove($from, $to);
-        $this->assertFalse($valid);
-    }
-
-    #[Test]
     public function testMoveMoreThanThreeSteps() {
         $board = new Board([
             '1,-1' => [[0, 'S']],
@@ -33,6 +18,19 @@ final class SpiderTest extends TestCase
         $spider = new Spider($board);
         $from = '1,-1';
         $to = '0,1';
+
+        $valid = $spider->validMove($from, $to);
+        $this->assertFalse($valid);
+    }
+
+    #[Test]
+    public function testInvalidMoveCurrentToCurrent() {
+        $board = new Board([
+            '0,0' => [[0, 'S']],
+        ]);
+        $spider = new Spider($board);
+        $from = '0,0';
+        $to = '0,0';
 
         $valid = $spider->validMove($from, $to);
         $this->assertFalse($valid);

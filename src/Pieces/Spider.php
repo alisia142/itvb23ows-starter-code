@@ -28,7 +28,7 @@ class Spider extends Piece
         return true;
     }
 
-    public function destinationReachableInThreeSlides($board, $curr, $dest, $visited = [], $count = 0) {
+    private function destinationReachableInThreeSlides($board, $curr, $dest, $visited = [], $count = 0) {
         if ($curr == $dest && $count == 3) {
             return true;
         }
@@ -41,7 +41,13 @@ class Spider extends Piece
             if ($board->slide($curr, $neighbour)) {
                 $visited[] = $curr;
 
-                if ($this->destinationReachableInThreeSlides($board, $neighbour, $dest, $visited, $count+1)) {
+                if ($this->destinationReachableInThreeSlides(
+                    $board,
+                    $neighbour,
+                    $dest,
+                    $visited,
+                    $count+1)
+                ) {
                     return true;
                 }
             }
