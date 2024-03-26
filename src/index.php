@@ -3,6 +3,8 @@
     use App\Database;
     use App\Game;
     use App\Ai;
+    
+    use GuzzleHttp\Client;
 
     session_start();
 
