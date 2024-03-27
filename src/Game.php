@@ -163,7 +163,7 @@ class Game
             $errMessage = "Board position has no neighbour";
         } elseif (
             $this->hands[$this->currentPlayer]->getSum() < 11 &&
-            !$this->board->neighboursAreTheSameColor($player, $to)
+            !$this->board->neighboursAreTheSameColor($this->currentPlayer, $to)
         ) {
             $errMessage = "Board position has opposing neighbour";
         }
@@ -270,10 +270,10 @@ class Game
         $this->setState($result[6]);
     }
 
-    // helper function for undo to check if movenumber > 0. If not, move can not be undone
+    // helper function for undo to check if moveCounter > 0. If not, move can not be undone
     public function willUndo(): bool
     {
-        return $this->moveNumber > 0;
+        return $this->moveCounter > 0;
     }
 
     // returns all "to" positions without duplicates

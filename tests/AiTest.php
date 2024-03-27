@@ -3,6 +3,7 @@
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use App\Ai;
 use App\Board;
 use App\Hand;
@@ -14,27 +15,39 @@ class AiTest extends Testcase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     @test
-     */
-    public function checkIfSuggestionHasCorrectParameters() {
+    #[Before]
+    public function startMockery(): void
+    {
+        Mockery::getConfiguration()->allowMockingNonExistentMethods(false);
+        Mockery::getConfiguration()->allowMockingMethodsUnnecessarily(false);
+    }
+
+    #[After]
+    public function purgeMockeryContainer(): void
+    {
+        Mockery::close();
+    }
+    
+    #[Test]
+    public function checkIfSuggestionHasCorrectParameters()
+    {
         $responseMock = new Response(200, [], json_encode(["play", "B", "0,0"]));
-        $guzzleSpy = Mockery::spy(Client::class);
-        $guzzleSpy->allows('post')->andReturn($responseMock);
+        $guzzleMock = Mockery::mock(Client::class);
+        $guzzleMock->allows('post')->andReturn($responseMock);
         
-        $ai = new Ai($guzzleSpy);
-        $moveNumber = 1;
+        $ai = new Ai($guzzleMock);
+        $moveCounter = 1;
         $hands = [
             '0' => new Hand(),
             '1' => new Hand(),
         ];
         $board = new Board();
 
-        $ai->createSuggestion($moveNumber, $hands, $board);
+        $ai->createSuggestion($moveCounter, $hands, $board);
 
-        $guzzleSpy->shouldHaveReceived()->post('', [
+        $guzzleMock->shouldHaveReceived()->post('', [
             'json' => [
-                'move_number' => $moveNumber,
+                'move_number' => $moveCounter,
                 'hand' => [
                     $hands[0]->getPieces(),
                     $hands[1]->getPieces(),
@@ -42,5 +55,23 @@ class AiTest extends Testcase
                 'board' => $board->getTiles(),
             ],
         ]);
+    }
+
+    #[Test]
+    public function testCheckIfCreateSuggestionIsEqualToExpectedSuggestion()
+    {
+        $guzzleMock = Mockery::mock(Client::class);
+        $guzzleMock->allows('post')->andReturns(new Response(body: '["play", "B", "0,0"]'));
+        $ai = new Ai($guzzleMock);
+        $moveCounter = 1;
+        $hands = [
+            0 => new Hand(),
+            1 => new Hand(),
+        ];
+
+        $board = new Board();
+        $suggestion = $ai->createSuggestion($moveCounter, $hands, $board);
+
+        $this->assertSame(['play', 'B', '0,0'], $suggestion);
     }
 }

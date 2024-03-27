@@ -9,7 +9,7 @@ use App\Board;
 class BeetleTest extends TestCase
 {
     #[Test]
-    public function testInvalidMove()
+    public function testInvalidMoveToOccupiedTile()
     {
         $board = new Board([
             '0,0' => [[0, 'B']],
@@ -25,4 +25,35 @@ class BeetleTest extends TestCase
         $this->assertFalse($valid);
     }
 
+    #[Test]
+    public function testInvalidMoveToStartingTile()
+    {
+        $board = new Board([
+            '0,0' => [[0, 'B']],
+            '0,1' => [[1, 'Q']],
+        ]);
+        $beetle = new Beetle($board);
+        $from = '0,0';
+        $to = '0,0';
+
+        $valid = $beetle->validMove($from, $to);
+
+        $this->assertFalse($valid);
+    }
+
+    #[Test]
+    public function testMoveOnTopOfOtherInsect()
+    {
+        $board = new Board([
+            '0,0' => [[0, 'B']],
+            '0,1' => [[1, 'A']],
+        ]);
+        $beetle = new Beetle($board);
+        $from = '0,0';
+        $to = '0,1';
+
+        $valid = $beetle->validMove($from, $to);
+
+        $this->assertFalse($valid);
+    }
 }

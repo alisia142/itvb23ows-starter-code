@@ -140,32 +140,30 @@ class Board
     */
     public function slide($from, $to): bool
     {
-        if (!$this->hasNeighBour($to, $board) || !$this->isNeighbour($from, $to)) {
+        if (!$this->hasNeighBour($to) || !$this->isNeighbour($from, $to)) {
             return false;
         }
-        $b = explode(',', $to);
-        $common = [];
-        foreach (self::OFFSETS as $pq) {
-            $p = $b[0] + $pq[0];
-            $q = $b[1] + $pq[1];
-            if ($this->isNeighbour($from, $p.",".$q)) {
-                $common[] = $p.",".$q;
-            }
-        }
 
-        if (!$this->tiles[$common[0]] &&
-            !$this->tiles[$common[1]] &&
-            !$this->tiles[$from] &&
-            !$this->tiles[$to]
+        $b = explode(',', $to);
+        $common = array_filter(
+            $this->getNeighbours($to, fn($neighbour) => !$this->isPositionEmpty($neighbour)),
+            fn($position) => $this->isNeighbour($to, $position)
+        );
+
+        if (
+            !isset($this->tiles[$common[0]]) &&
+            !isset($this->tiles[$common[1]]) &&
+            !isset($this->tiles[$from]) &&
+            !isset($this->tiles[$to])
         ) {
             return false;
         }
         return min(
-            $this->len($this->tiles[$common[0]]),
-            $this->len($this->tiles[$common[1]])
+            $this->len($this->tiles[$common[0]] ?? []),
+            $this->len($this->tiles[$common[1]] ?? [])
         ) <= max(
-            $this->len($this->tiles[$from]),
-            $this->len($this->tiles[$to])
+            $this->len($this->tiles[$from] ?? []),
+            $this->len($this->tiles[$to] ?? [])
         );
     }
 

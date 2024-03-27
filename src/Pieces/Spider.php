@@ -21,8 +21,7 @@ class Spider extends Piece
         $board->removeTile($from);
         if ($from == $to || (!$board->isPositionEmpty($to))) {
             return false;
-        }
-        if (!$this->destinationReachableInThreeSlides($board, $from, $to)) {
+        } elseif (!$this->destinationReachableInThreeSlides($board, $from, $to)) {
             return false;
         }
         return true;

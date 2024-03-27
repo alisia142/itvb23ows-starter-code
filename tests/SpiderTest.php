@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use App\Pieces\Spider;
 use App\Board;
 
-final class SpiderTest extends TestCase
+class SpiderTest extends TestCase
 {
     #[Test]
     public function testMoveMoreThanThreeSteps() {

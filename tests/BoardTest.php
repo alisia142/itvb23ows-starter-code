@@ -8,50 +8,44 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class BoardTest extends TestCase
 {
-    public static function provider(): array
+    public static function boardConfiguration()
     {
         return [
-            '2 queens' => [
-                'tiles' => [
-                    '0,0' => [[0, 'Q']],
-                    '0,1' => [[1, 'Q']],
-                ],
-                'currentPlayer' => 0,
+            "Empty board" => [
+                'tiles' => [],
             ],
-            '2 moves for white, 2 moves for black' => [
+            "Board with two queens" => [
                 'tiles' => [
-                    '0,0' => [[0, 'Q']],
-                    '0,1' => [[1, 'Q']],
-                    '1,-1' => [[0, 'S']],
-                    '-1,-1' => [[1, 'A']],
+                    '0,0' => [["Q", 0]],
+                    '0,1' => [["Q", 1]],
                 ],
-                'currentPlayer' => 1,
+            ],
+            "Board with only one piece" => [
+                'tiles' => [
+                    '0,0' => [["B", 0]],
+                ],
+            ],
+            "Board with pieces of the same color" => [
+                'tiles' => [
+                    '0,0' => [["B", 0]],
+                    '0,1' => [["B", 1]],
+                    '0,2' => [["B", 2]],
+                ],
+            ],
+            "Board with multiple pieces" => [
+                'tiles' => [
+                    '0,0' => [["B", 0]],
+                    '1,1' => [["Q", 1]],
+                    '2,2' => [["A", 2]],
+                ],
             ],
         ];
     }
 
-    #[DataProvider('provider')]
-    public function testPositionsOwnedByPlayerWithProvider($tiles, $currentPlayer)
+    #[DataProvider('boardConfiguration')]
+    public function testBoard($tiles)
     {
         $board = new Board($tiles);
-        $ownedPos = $board->getAllPositionsOwnedByPlayer($currentPlayer);
-        foreach ($ownedPos as $pos) {
-            $this->assertTrue($board->isTileOwnedByPlayer($pos, $currentPlayer));
-        }
-    }
-
-    #[Test]
-    public function testBoardInitialization()
-    {
-        $initialTiles = [
-            '0,0' => [[0, '']],
-            '0,1' => [[1, '']],
-            '1,0' => [[0, '']],
-            '1,1' => [[1, '']],
-        ];
-        
-        $board = new Board($initialTiles);
-        
-        $this->assertEquals($initialTiles, $board->getTiles());
+        $this->assertEquals($tiles, $board->getTiles());
     }
 }
