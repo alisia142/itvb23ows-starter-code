@@ -19,31 +19,39 @@ class Spider extends Piece
     {
         $board = clone $this->board;
         $board->removeTile($from);
-        if ($from == $to || (!$board->isPositionEmpty($to))) {
+        if ($from == $to) {
             return false;
-        } elseif (!$this->destinationReachableInThreeSlides($board, $from, $to)) {
+        } elseif (!$board->isPositionEmpty($to)) {
+            return false;
+        } elseif (!$this->destinationPositioninationReachableInThreeSlides($board, $from, $to)) {
             return false;
         }
         return true;
     }
 
-    private function destinationReachableInThreeSlides($board, $curr, $dest, $visited = [], $count = 0) {
-        if ($curr == $dest && $count == 3) {
+    private function destinationPositioninationReachableInThreeSlides(
+        $board,
+        $currentPosition,
+        $destinationPosition,
+        $visited = [],
+        $count = 0
+    ) {
+        if ($currentPosition == $destinationPosition && $count == 3) {
             return true;
         }
-        $neighbours = $board->getNeighbours($curr, fn($neighbour) => $board->isPositionEmpty($neighbour));
+        $neighbours = $board->getNeighbours($currentPosition, fn($neighbour) => $board->isPositionEmpty($neighbour));
         
         foreach ($neighbours as $neighbour) {
             if (in_array($neighbour, $visited)) {
                 continue;
             }
-            if ($board->slide($curr, $neighbour)) {
-                $visited[] = $curr;
+            if ($board->slide($currentPosition, $neighbour)) {
+                $visited[] = $currentPosition;
 
-                if ($this->destinationReachableInThreeSlides(
+                if ($this->destinationPositioninationReachableInThreeSlides(
                     $board,
                     $neighbour,
-                    $dest,
+                    $destinationPosition,
                     $visited,
                     $count+1)
                 ) {
