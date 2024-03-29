@@ -10,6 +10,7 @@ class BoardTest extends TestCase
 {
     public static function boardConfiguration()
     {
+        // arrange
         return [
             "Empty board" => [
                 'tiles' => [],
@@ -45,7 +46,10 @@ class BoardTest extends TestCase
     #[DataProvider('boardConfiguration')]
     public function testBoard($tiles)
     {
+        // act
         $board = new Board($tiles);
+
+        // assert
         $this->assertEquals($tiles, $board->getTiles());
     }
 }

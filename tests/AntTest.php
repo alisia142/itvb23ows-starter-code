@@ -10,6 +10,7 @@ class AntTest extends TestCase
 {
     #[Test]
     public function testValidMoveNextToCurrentLocation() {
+        // arrange
         $board = new Board([
             '1,-1' => [[0, 'Q']],
             '0,0' => [[0, 'A']],
@@ -19,12 +20,16 @@ class AntTest extends TestCase
         $from = '0,0';
         $to = '0,1';
 
+        // act
         $valid = $ant->validMove($from, $to);
+
+        // assert
         $this->assertTrue($valid);
     }
 
     #[Test]
     public function testInvalidMoveCurrentToCurrent() {
+        // arrange
         $board = new Board([
             '0,0' => [[0, 'A']],
         ]);
@@ -32,7 +37,10 @@ class AntTest extends TestCase
         $from = '0,0';
         $to = '0,0';
 
+        // act
         $valid = $ant->validMove($from, $to);
+
+        // assert
         $this->assertFalse($valid);
     }
 }

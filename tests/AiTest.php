@@ -31,10 +31,10 @@ class AiTest extends Testcase
     #[Test]
     public function checkIfSuggestionHasCorrectParameters()
     {
+        // arrange
         $responseMock = new Response(200, [], json_encode(["play", "B", "0,0"]));
         $guzzleMock = Mockery::mock(Client::class);
         $guzzleMock->allows('post')->andReturn($responseMock);
-        
         $ai = new Ai($guzzleMock);
         $moveCounter = 1;
         $hands = [
@@ -43,8 +43,10 @@ class AiTest extends Testcase
         ];
         $board = new Board();
 
+        // act
         $ai->createSuggestion($moveCounter, $hands, $board);
 
+        // assert
         $guzzleMock->shouldHaveReceived()->post('', [
             'json' => [
                 'move_number' => $moveCounter,
@@ -60,6 +62,7 @@ class AiTest extends Testcase
     #[Test]
     public function testCheckIfCreateSuggestionIsEqualToExpectedSuggestion()
     {
+        // arrange
         $guzzleMock = Mockery::mock(Client::class);
         $guzzleMock->allows('post')->andReturns(new Response(body: '["play", "B", "0,0"]'));
         $ai = new Ai($guzzleMock);
@@ -68,10 +71,12 @@ class AiTest extends Testcase
             0 => new Hand(),
             1 => new Hand(),
         ];
-
         $board = new Board();
+
+        // act
         $suggestion = $ai->createSuggestion($moveCounter, $hands, $board);
 
+        // assert
         $this->assertSame(['play', 'B', '0,0'], $suggestion);
     }
 }

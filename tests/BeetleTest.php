@@ -11,6 +11,7 @@ class BeetleTest extends TestCase
     #[Test]
     public function testInvalidMoveToOccupiedTile()
     {
+        // arrange
         $board = new Board([
             '0,0' => [[0, 'B']],
             '0,1' => [[1, 'Q']],
@@ -20,14 +21,17 @@ class BeetleTest extends TestCase
         $from = '0,0';
         $to = '0,1';
 
+        // act
         $valid = $beetle->validMove($from, $to);
 
+        // assert
         $this->assertFalse($valid);
     }
 
     #[Test]
     public function testInvalidMoveToStartingTile()
     {
+        // arrange
         $board = new Board([
             '0,0' => [[0, 'B']],
             '0,1' => [[1, 'Q']],
@@ -36,14 +40,17 @@ class BeetleTest extends TestCase
         $from = '0,0';
         $to = '0,0';
 
+        // act
         $valid = $beetle->validMove($from, $to);
 
+        // assert
         $this->assertFalse($valid);
     }
 
     #[Test]
     public function testMoveOnTopOfOtherInsect()
     {
+        // arrange
         $board = new Board([
             '0,0' => [[0, 'B']],
             '0,1' => [[1, 'A']],
@@ -52,8 +59,10 @@ class BeetleTest extends TestCase
         $from = '0,0';
         $to = '0,1';
 
+        // act
         $valid = $beetle->validMove($from, $to);
 
+        // assert
         $this->assertFalse($valid);
     }
 }
