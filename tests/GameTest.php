@@ -148,12 +148,15 @@ class GameTest extends TestCase
         $aiMoveMock = Mockery::mock(Ai::class);
         $board = new Board([
             '0,0' => [[0, 'Q']],
-            '0,-1' => [[1, 'B']],
-            '1,-1' => [[0, 'A']],
             '1,0' => [[1, 'Q']],
-            '0,1' => [[0, 'A']],
-            '-1,1' => [[1, 'G']],
-            '-1,0' => [[0, 'G']],
+            '0,-1' => [[0, 'B']],
+            '1,-1' => [[1, 'B']],
+            '2,-1' => [[0, 'A']],
+            '2,0' => [[1, 'A']],
+            '1,1' => [[0, 'S']],
+            '0,1' => [[1, 'S']],
+            '-1,1' => [[0, 'G']],
+            '-1,0' => [[1, 'G']],
         ]);
         $hands = [
             0 => new Hand(),
@@ -168,5 +171,27 @@ class GameTest extends TestCase
 
         // assert
         $this->assertEquals(-1, $winner);
+    }
+
+    #[Test]
+    public function testNoWinnerIfGameIsOngoing()
+    {
+        // arrange
+        $dbMock = Mockery::mock(Database::class);
+        $aiMoveMock = Mockery::mock(Ai::class);
+        $board = new Board();
+        $hands = [
+            0 => new Hand(),
+            1 => new Hand(),
+        ];
+        $currentPlayer = 0;
+        $moveCounter = 0;
+        $game = new Game($dbMock, $aiMoveMock, -1, $board, $hands, $currentPlayer, $moveCounter);
+
+        // act
+        $winner = $game->returnWinner();
+
+        // assert
+        $this->assertEquals(null, $winner);
     }
 }

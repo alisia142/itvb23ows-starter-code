@@ -318,14 +318,28 @@ class Game
     public function returnWinner(): ?int
     {
         $positions = $this->board->getAllPositions();
+        $whiteSurrounded = false;
+        $blackSurrounded = false;
 
         foreach($positions as $position) {
             [$currentPlayer, $piece] = $this->board->getTileOnPosition($position);
             if ($currentPlayer !== null) {
-                if ($this->board->isPlayerSurrounded($currentPlayer, $position)) {
-                    return $currentPlayer;
+                if ($piece == "Q") {
+                    if ($this->board->isPlayerSurrounded($currentPlayer, $position)) {
+                        if ($currentPlayer == 0) {
+                            $whiteSurrounded = true;
+                        } else {
+                            $blackSurrounded = true;
+                        }
+                    }
                 }
             }
+        }
+
+        if ($whiteSurrounded && $blackSurrounded) {
+            return -1;
+        } else {
+            return $currentPlayer;
         }
 
         return null;
