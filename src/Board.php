@@ -213,4 +213,18 @@ class Board
         }
         return $neighbours;
     }
+
+    // returns if player is surrounded based on position
+    public function isPlayerSurrounded($currentPlayer, $position): bool
+    {
+        $neighbours = $this->getNeighbours($position);
+
+        foreach ($neighbours as $neighbour) {
+            if($this->isPositionEmpty($neighbour)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

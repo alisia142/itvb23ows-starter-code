@@ -313,4 +313,21 @@ class Game
             throw new InvalidMove('Requested move does not exist.');
         }
     }
+
+    // returns the winner of the game based on the board status
+    public function returnWinner(): ?int
+    {
+        $positions = $this->board->getAllPositions();
+
+        foreach($positions as $position) {
+            [$currentPlayer, $piece] = $this->board->getTileOnPosition($position);
+            if ($currentPlayer !== null) {
+                if ($this->board->isPlayerSurrounded($currentPlayer, $position)) {
+                    return $currentPlayer;
+                }
+            }
+        }
+
+        return null;
+    }
 }
