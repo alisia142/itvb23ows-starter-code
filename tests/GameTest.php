@@ -79,4 +79,64 @@ class GameTest extends TestCase
         $dbMock->shouldHaveReceived('createMove', [-1, 'play', 'Q', '0,0', Mockery::any(), Mockery::any()]);
         $this->assertTrue(Mockery::getContainer()->mockery_getExpectationCount() > 0); // extra assertion to check if expected outcome > 0
     }
+
+    #[Test]
+    public function testReturnWinnerIsWhiteIfPossible()
+    {
+        // arrange
+        $dbMock = Mockery::mock(Database::class);
+        $aiMoveMock = Mockery::mock(Ai::class);
+        $board = new Board([
+            '0,0' => [[0, 'S']],
+            '0,-1' => [[1, 'B']],
+            '1,-1' => [[0, 'A']],
+            '1,0' => [[1, 'Q']],
+            '0,1' => [[0, 'A']],
+            '-1,1' => [[1, 'G']],
+            '-1,0' => [[0, 'G']],
+        ]);
+        $hands = [
+            0 => new Hand(),
+            1 => new Hand(),
+        ];
+        $currentPlayer = 0;
+        $moveCounter = 0;
+        $game = new Game($dbMock, $aiMoveMock, -1, $board, $hands, $currentPlayer, $moveCounter);
+
+        // act
+        $winner = $game->returnWinner();
+
+        // assert
+        $this->assertEquals(0, $winner);
+    }
+
+    #[Test]
+    public function testReturnWinnerIsBlackIfPossible()
+    {
+        // arrange
+        $dbMock = Mockery::mock(Database::class);
+        $aiMoveMock = Mockery::mock(Ai::class);
+        $board = new Board([
+            '0,0' => [[1, 'S']],
+            '0,-1' => [[0, 'B']],
+            '1,-1' => [[1, 'A']],
+            '1,0' => [[0, 'Q']],
+            '0,1' => [[1, 'A']],
+            '-1,1' => [[0, 'G']],
+            '-1,0' => [[1, 'G']],
+        ]);
+        $hands = [
+            0 => new Hand(),
+            1 => new Hand(),
+        ];
+        $currentPlayer = 1;
+        $moveCounter = 0;
+        $game = new Game($dbMock, $aiMoveMock, -1, $board, $hands, $currentPlayer, $moveCounter);
+
+        // act
+        $winner = $game->returnWinner();
+
+        // assert
+        $this->assertEquals(1, $winner);
+    }
 }
